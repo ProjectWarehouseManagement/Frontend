@@ -17,7 +17,7 @@ const RegisterForm = () => {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch("http://localhost:3000/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,7 +100,7 @@ const RegisterForm = () => {
           </div>
 
           <button type="submit" className={classes.button}>Regisztráció</button>
-          <p>Már van fiókja?   <NavLink to="/">Bejelentkezés</NavLink></p>
+          <p>Már van fiókja?   <NavLink to="/" className={classes.link}>Bejelentkezés</NavLink></p>
         </form>
       </div>
     </div>

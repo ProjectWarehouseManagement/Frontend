@@ -61,7 +61,7 @@ const LoginForm: React.FC = () => {
             />
           </div>
           <button type="submit">Bejelentkezés</button>
-          <p>Még nincs fiókja?  gg<NavLink to="/registration">Regisztrácó</NavLink></p>
+          <p>Még nincs fiókja?  <NavLink to="/registration" className={classes.link}>Regisztrácó</NavLink></p>
         </form>
       </div>
     </div>
