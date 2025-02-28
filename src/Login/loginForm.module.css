@@ -63,25 +63,25 @@ input {
 }
 
 input:focus {
-  border-color: #007bff;
+  border-color: #555555;
   outline: none;
 }
 
 button {
-  font-family: 'Times New Roman', Times, serif;
-  background-color: #444444;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-family: 'Times New Roman', Times, serif !important;
+  background-color: #444444 !important;
+  color: white !important;
+  padding: 12px !important;
+  border: none !important;
+  border-radius: 5px !important;
+  margin-top: 28px !important;
+  font-size: 1.1rem !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease !important;
 }
 
 button:hover {
-  background-color: #555555;
+  background-color: #555555 !important;
 }
 
 .message {

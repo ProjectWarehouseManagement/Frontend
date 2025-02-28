@@ -104,7 +104,7 @@ const RegisterForm = () => {
           </div>
 
           <button type="submit" className={classes.button}>Regisztráció</button>
-          <p>Már van fiókja?   <NavLink to="/" className={classes.link}>Bejelentkezés</NavLink></p>
+          <p>Már van fiókja?   <NavLink to="/login" className={classes.link}>Bejelentkezés</NavLink></p>
         </form>
       </div>
     </div>
