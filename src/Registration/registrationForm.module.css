@@ -6,12 +6,14 @@
 
 .container {
   display: flex;
+  font-family: initial;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #333333;
-  padding: 20px; 
+  background: rgb(0,0,0);
+  background: linear-gradient(236deg, rgba(0,0,0,1) 2%, rgba(155,155,155,1) 50%, rgba(0,0,0,1) 98%);
+  max-height: 100vh;
 }
 
 .formWrapper {
@@ -21,7 +23,7 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   width: 90%; 
   max-width: 600px;
-  min-height: 400px;
+  min-height: auto;
 }
 
 h2 {
@@ -71,10 +73,12 @@ input:focus {
 }
 
 .button {
+  font-family: 'Times New Roman', Times, serif;
   background-color: #444444;
   color: white;
   padding: 12px;
   border: none;
+  margin-bottom: 10px;
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;

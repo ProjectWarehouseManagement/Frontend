@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import classes from "./loginForm.module.css";
 import { NavLink } from "react-router-dom";
 
@@ -34,11 +34,15 @@ const LoginForm: React.FC = () => {
       setError((err as Error).message);
     }
   };
+  
+  useEffect(() => {
+      document.title = "Bejelentkezés";
+    }, []);
 
   return (
     <div className={classes.container}>
       <div className={classes.formWrapper}>
-        <h2>Bejelentkezés</h2>
+        <h2>Üdvözöljük újra</h2>
         {error && <p className={`${classes.message} ${classes.error}`}>{error}</p>}
         {success && <p className={`${classes.message} ${classes.success}`}>{success}</p>}
         <form onSubmit={handleSubmit}>

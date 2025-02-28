@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import classes from "./registrationForm.module.css";
 import { NavLink } from "react-router-dom";
 
@@ -43,10 +43,14 @@ const RegisterForm = () => {
     }
   };
 
+  useEffect(() => {
+    document.title = "Regisztráció";
+  }, []);
+  
   return (
     <div className={classes.container}>
       <div className={classes.formWrapper}>
-        <h2>Regisztráció</h2>
+        <h2>Fiók létrehozása</h2>
 
         {error && <p className={`${classes.message} ${classes.error}`}>{error}</p>}
         {success && <p className={`${classes.message} ${classes.success}`}>{success}</p>}
