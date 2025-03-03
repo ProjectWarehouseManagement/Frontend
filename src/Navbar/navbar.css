@@ -1,0 +1,46 @@
+.navbar .dropdown-menu{
+  padding: 5px;
+  background-color: black;
+  margin-bottom: 0;
+}
+
+.dropdown-menu .dropdown-item {
+    color: #a0a0a0;
+    background-color: #1a1a1a;
+  }
+
+.navbar-collpase{
+  height: 70px;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+  .dropdown-menu .active {
+    background-color: #1a1a1a !important; /* Sötétebb szürke háttér */
+    color: white !important; /* Fehér szöveg szín */
+  }
+
+.dropdown-menu .dropdown-item:hover {
+    color: #fff;
+    background-color: #444444;
+  }
+
+.navbar {
+  background-color: black;
+  border-color: black;
+}
+
+
+.navbar .navbar-brand {
+  color: white;
+}
+
+.navbar .navbar-nav > li > a:hover {
+  color: white;
+}
+
+
