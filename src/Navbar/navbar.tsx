@@ -1,18 +1,33 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./navbar.css";
 
 const NavigationBar = () => {
+  const location = useLocation();
+  
+  // Menü bezárása kattintáskor
+  const closeMenu = () => {
+    const navbarCollapse = document.querySelector(".navbar-collapse") as HTMLElement;
+    if (navbarCollapse.classList.contains("show")) {
+      navbarCollapse.classList.remove("show");
+    }
+  };
+
+  // Ha az URL változik, automatikusan bezárja a menüt
+  useEffect(() => {
+    closeMenu();
+  }, [location]);
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
-          GROUP.COM
+          Warehouse Management
         </Link>
         <button
-          className="navbar-toggler"
+          className="navbar-toggler mt-0 p-0"
+          style={{height: "40px", width: "40px"}}
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
@@ -58,16 +73,16 @@ const NavigationBar = () => {
           <ul className="navbar-nav">
             <li className="nav-item">
               <NavLink to="/profile" className="nav-link">
-                <span className="glyphicon glyphicon-user"></span> Profile
+                <span className="glyphicon glyphicon-user"></span> Profil
               </NavLink>
             </li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown">
-                <span className="glyphicon glyphicon-log-in"></span> Login / Sign Up
+                <span className="glyphicon glyphicon-log-in"></span> Bejelenkezés / Regisztráció
               </a>
-              <ul className="dropdown-menu">
-                <li><NavLink to="/login" className="dropdown-item">Login</NavLink></li>
-                <li><NavLink to="/registration" className="dropdown-item">Sign Up</NavLink></li>
+              <ul className="dropdown-menu w-100">
+                <li><NavLink to="/login" className="dropdown-item">Bejelentkezés</NavLink></li>
+                <li><NavLink to="/registration" className="dropdown-item">Regisztráció</NavLink></li>
               </ul>
             </li>
           </ul>

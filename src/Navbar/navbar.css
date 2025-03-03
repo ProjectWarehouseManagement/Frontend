@@ -9,6 +9,16 @@
     background-color: #1a1a1a;
   }
 
+.navbar-collpase{
+  height: 70px;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
   .dropdown-menu .active {
     background-color: #1a1a1a !important; /* Sötétebb szürke háttér */
     color: white !important; /* Fehér szöveg szín */
