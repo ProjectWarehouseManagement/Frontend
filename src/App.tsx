@@ -8,7 +8,6 @@ import NavigationBar from './Navbar/navbar';
 const App = () => {
   return (
     <>
-        <NavigationBar/>
          <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
