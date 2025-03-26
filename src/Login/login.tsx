@@ -34,39 +34,43 @@ const LoginForm: React.FC = () => {
       setError((err as Error).message);
     }
   };
-  
+
   useEffect(() => {
-      document.title = "Bejelentkezés";
-    }, []);
+    document.title = "Bejelentkezés";
+  }, []);
 
   return (
-    <div className={classes.container}>
-      <div className={classes.formWrapper}>
-        <h2>Üdvözöljük újra</h2>
-        {error && <p className={`${classes.message} ${classes.error}`}>{error}</p>}
-        {success && <p className={`${classes.message} ${classes.success}`}>{success}</p>}
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>Email:</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label>Jelszó:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">Bejelentkezés</button>
-          <p>Még nincs fiókja?  <NavLink to="/registration" className={classes.link}>Regisztrácó</NavLink></p>
-        </form>
+    <div className={classes.logIn}>
+      <div className={classes.container}>
+        <div className={classes.formWrapper}>
+          <h2>Üdvözöljük újra</h2>
+          {error && <p className={`${classes.message} ${classes.error}`}>{error}</p>}
+          {success && <p className={`${classes.message} ${classes.success}`}>{success}</p>}
+          <form onSubmit={handleSubmit}>
+            <div className={classes.formGroup}>
+              <label>Email</label>
+              <input
+                type="email"
+                placeholder="example@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className={classes.formGroup}>
+              <label>Jelszó</label>
+              <input
+                type="password"
+                placeholder="*********"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit">Bejelentkezés</button>
+            <p>Még nincs fiókja?  <NavLink to="/registration" className={classes.link}>Regisztrácó</NavLink></p>
+          </form>
+        </div>
       </div>
     </div>
   );

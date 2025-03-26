@@ -15,7 +15,7 @@ const NavigationBar = () => {
     }
   };
 
-  // Ha az URL változik, automatikusan bezárja a menüt
+  // Ha az URL változik, bezárja a menüt
   useEffect(() => {
     closeMenu();
   }, [location]);
