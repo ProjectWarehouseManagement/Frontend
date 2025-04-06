@@ -6,7 +6,9 @@
 
 .dropdown-menu .dropdown-item {
     color: #a0a0a0;
-    background-color: #1a1a1a;
+    background-color: black;
+    margin-bottom: 2px;
+    border-radius: 3px;
   }
 
 .navbar-collpase{
@@ -20,16 +22,16 @@
 }
 
   .dropdown-menu .active {
-    background-color: #1a1a1a !important; /* Sötétebb szürke háttér */
     color: white !important; /* Fehér szöveg szín */
   }
 
 .dropdown-menu .dropdown-item:hover {
     color: #fff;
-    background-color: #444444;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
   }
 
 .navbar {
+  
   background-color: black;
   border-color: black;
 }

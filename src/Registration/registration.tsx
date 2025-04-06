@@ -50,6 +50,7 @@ const RegisterForm = () => {
   return (
     <div className={classes.container}>
       <div className={classes.formWrapper}>
+        
         <h2>Fiók létrehozása</h2>
 
         {error && <p className={`${classes.message} ${classes.error}`}>{error}</p>}
@@ -60,6 +61,7 @@ const RegisterForm = () => {
             <label>Email</label>
             <input
               type="email"
+              placeholder="example@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -70,6 +72,7 @@ const RegisterForm = () => {
             <label>Jelszó</label>
             <input
               type="password"
+              placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -80,6 +83,7 @@ const RegisterForm = () => {
             <label>Keresztnév</label>
             <input
               type="text"
+              placeholder="Márton"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             />
@@ -89,6 +93,7 @@ const RegisterForm = () => {
             <label>Vezetéknév</label>
             <input
               type="text"
+              placeholder="Nagy"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
             />
@@ -98,6 +103,7 @@ const RegisterForm = () => {
             <label>Telefonszám</label>
             <input
               type="text"
+              placeholder="06205440097"
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
