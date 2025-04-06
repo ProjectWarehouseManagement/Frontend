@@ -45,25 +45,21 @@ const NavigationBar = () => {
             </li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown">
-                About Us
+                Megrendelesek Hozzaadasa
               </a>
               <ul className="dropdown-menu">
-                <li><NavLink to="/about-one" className="dropdown-item">About One</NavLink></li>
-                <li><NavLink to="/about-two" className="dropdown-item">About Two</NavLink></li>
-                <li><NavLink to="/about-three" className="dropdown-item">About Three</NavLink></li>
-                <li><NavLink to="/about-four" className="dropdown-item">About Four</NavLink></li>
-                <li><NavLink to="/about-five" className="dropdown-item">About Five</NavLink></li>
-                <li><NavLink to="/about-six" className="dropdown-item">About Six</NavLink></li>
+                <li><NavLink to="/about-one" className="dropdown-item">Kimeno Megrendeles</NavLink></li>
+                <li><NavLink to="/about-two" className="dropdown-item">Bejovo Megrendeles</NavLink></li>
               </ul>
             </li>
             <li className="nav-item">
-              <NavLink to="/welcome" className="nav-link">Welcome</NavLink>
+              <NavLink to="/welcome" className="nav-link">Minden bejovo megrendeles</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/services" className="nav-link">Services</NavLink>
+              <NavLink to="/services" className="nav-link">Minden kimeno megrendeles</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/gallery" className="nav-link">Gallery</NavLink>
+              <NavLink to="/gallery" className="nav-link">Aktiv szamlak</NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/contact" className="nav-link">Contact</NavLink>
