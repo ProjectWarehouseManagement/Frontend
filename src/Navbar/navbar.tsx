@@ -23,7 +23,7 @@ const NavigationBar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
-          Warehouse Management
+          Saxon Kitchenware
         </Link>
         <button
           className="navbar-toggler mt-0 p-0"
