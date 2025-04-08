@@ -1,11 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./navbar.css";
+import { useAuth } from "../AuthContext";
 
 const NavigationBar = () => {
   const location = useLocation();
+  const { isLoggedIn, logout } = useAuth();
   
   // Menü bezárása kattintáskor
   const closeMenu = () => {
@@ -53,7 +55,7 @@ const NavigationBar = () => {
               </ul>
             </li>
             <li className="nav-item">
-              <NavLink to="/welcome" className="nav-link">Minden bejovo megrendeles</NavLink>
+              <NavLink to="/orders" className="nav-link">Minden bejovo megrendeles</NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/services" className="nav-link">Minden kimeno megrendeles</NavLink>
@@ -73,13 +75,22 @@ const NavigationBar = () => {
               </NavLink>
             </li>
             <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown">
-                <span className="glyphicon glyphicon-log-in"></span> Bejelenkezés / Regisztráció
-              </a>
-              <ul className="dropdown-menu w-100">
-                <li><NavLink to="/login" className="dropdown-item">Bejelentkezés</NavLink></li>
-                <li><NavLink to="/registration" className="dropdown-item">Regisztráció</NavLink></li>
-              </ul>
+              {isLoggedIn ? (
+                <div>
+                <button className="btn btn-danger" onClick={logout}>Kijelentkezés</button>
+              </div>
+                
+              ) : (
+                <div>
+                  <a className="nav-link dropdown-toggle" href="#" id="loginDropdown" role="button" data-bs-toggle="dropdown">
+                  <span className="glyphicon glyphicon-log-in"></span> Bejelenkezés / Regisztráció
+                  </a>
+                  <ul className="dropdown-menu w-100">
+                    <li><NavLink to="/login" className="dropdown-item">Bejelentkezés</NavLink></li>
+                    <li><NavLink to="/registration" className="dropdown-item">Regisztráció</NavLink></li>
+                  </ul>
+                </div>
+              )}
             </li>
           </ul>
         </div>

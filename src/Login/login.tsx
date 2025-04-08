@@ -1,12 +1,16 @@
-import { useState, FormEvent, useEffect } from "react";
+import { useState, FormEvent, useEffect, useContext } from "react";
 import classes from "./loginForm.module.css";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../AuthContext";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const { isLoggedIn, setIsLoggedIn } = useAuth();
   const [success, setSuccess] = useState<string>("");
+  
+  
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -28,7 +32,7 @@ const LoginForm: React.FC = () => {
         throw new Error(data.message || "Hibás bejelentkezés");
       }
 
-      localStorage.setItem("token", data.token);
+      setIsLoggedIn(true);
       setSuccess("Sikeres bejelentkezés!");
     } catch (err) {
       setError((err as Error).message);
