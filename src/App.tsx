@@ -3,6 +3,7 @@ import Login from "./Login/login";
 import Home from "./Home/Home"
 import Registration from "./Registration/registration";
 import OrdersComponent from './AllIncomingOrders';
+import AddOrderForm from './AddOrderModal';
 
 
 const App = () => {
@@ -13,6 +14,8 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/orders" element={<OrdersComponent />} />
+            <Route path="*" element={<Home />} /> {/* Fallback route */}
+            <Route path="/addOrder" element={<AddOrderForm />} /> {/* Fallback route */}
          </Routes>
       </>
   );

@@ -1,13 +1,14 @@
-import { useState, FormEvent, useEffect, useContext } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import classes from "./loginForm.module.css";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../AuthContext";
+import { api } from "../environments/api";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
+  const { setIsLoggedIn } = useAuth();
   const [success, setSuccess] = useState<string>("");
   
   
@@ -18,19 +19,7 @@ const LoginForm: React.FC = () => {
     setSuccess("");
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Hibás bejelentkezés");
-      }
+      await api.post("/auth/login", JSON.stringify({ email, password }));
 
       setIsLoggedIn(true);
       setSuccess("Sikeres bejelentkezés!");

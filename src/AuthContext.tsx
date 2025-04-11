@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { ReactNode } from 'react';
+import { api } from './environments/api';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -15,15 +16,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const response = await fetch('http://localhost:3000/auth/check', {
-          method: 'POST',
-          credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        setIsLoggedIn(response.ok);
+        await api.post('/auth/check');
+        setIsLoggedIn(true);
       } catch (error) {
         console.error('Error checking authentication status:', error);
         setIsLoggedIn(false);
@@ -35,13 +29,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await fetch('http://localhost:3000/auth/logout', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-      });
+      await api.post('/auth/logout');
+
       setIsLoggedIn(false);
     } catch (error) {
       console.error('Error logging out:', error);

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import ExcelReader from './ExcelReader';
 import { ProviderModal } from './ProviderModal';
+import { api } from './environments/api';
+import { useAuth } from './AuthContext';
+import { AxiosError } from 'axios';
 
 type Order = {
   id: number;
@@ -20,19 +23,19 @@ type OrderDetail = {
   OrderQuantity: number;
   ExpectedDate: string;
   productId: number;
-  product?: { // Added optional product property
+  product?: {
     id: number;
     name: string;
   };
   addressId: number;
-  address?: { // Added optional address property
+  address?: {
     id: number;
     street: string;
     city: string;
     zipCode: string;
   };
   warehouseId: number;
-  warehouse?: { // Added optional warehouse property
+  warehouse?: {
     id: number;
     name: string;
   };
@@ -42,42 +45,51 @@ const OrdersComponent = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [authError, setAuthError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const { isLoggedIn } = useAuth();
+
+  const fetchOrders = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      const response = await api.get('/orders');
+      setOrders(response.data);
+    } catch (err) {
+      setError(err instanceof AxiosError ? err.message : 'An unknown error occurred');
+      setOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  useEffect(() => {
+    fetchOrders();
+  }, [refreshKey]);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/orders', {
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+    if (!isLoggedIn) {
+      setOrders([]);
+    }
+  }, [isLoggedIn]);
 
-        if (response.status === 401) {
-          setAuthError(true);
-          setError('Please log in to view orders');
-          setLoading(false);
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setOrders(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrders();
-  }, []);
+  if (error) {
+    return (
+      <div className="max-w-md mx-auto mt-10 p-6 bg-red-50 rounded-lg shadow">
+        <button
+          onClick={() => {
+            setRefreshKey(prev => prev + 1);
+          }}
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Try Again
+        </button>
+        <h2 className="text-xl font-semibold text-red-800">Error</h2>
+        <p className="mt-2 text-red-600">{error}</p>
+        
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -87,41 +99,19 @@ const OrdersComponent = () => {
     );
   }
 
-  if (authError) {
-    return (
-      <div className="max-w-md mx-auto mt-10 p-6 bg-red-50 rounded-lg shadow">
-        <h2 className="text-xl font-semibold text-red-800">Authentication Required</h2>
-        <p className="mt-2 text-red-600">You need to be logged in to view orders.</p>
-        <button
-          onClick={() => window.location.href = '/login'}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Go to Login
-        </button>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="max-w-md mx-auto mt-10 p-6 bg-red-50 rounded-lg shadow">
-        <h2 className="text-xl font-semibold text-red-800">Error</h2>
-        <p className="mt-2 text-red-600">{error}</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Try Again
-        </button>
-      </div>
-    );
-  }
-
-  if (orders.length === 0) {
+  if (orders.length === 0 && !loading) {
     return (
       <div className="max-w-md mx-auto mt-10 p-6 bg-blue-50 rounded-lg shadow">
         <h2 className="text-xl font-semibold text-blue-800">No Orders Found</h2>
         <p className="mt-2 text-blue-600">There are no orders to display at this time.</p>
+        <button
+          onClick={() => {
+            setRefreshKey(prev => prev + 1);
+          }}
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Refresh
+        </button>
       </div>
     );
   }
@@ -255,7 +245,6 @@ const OrdersComponent = () => {
         onClose={() => setIsModalOpen(false)}
         onSuccess={() => setRefreshKey(prev => prev + 1)} // Trigger data refresh
       />
-      <ExcelReader />
     </div>
   );
 };

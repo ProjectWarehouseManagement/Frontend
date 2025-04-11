@@ -1,15 +1,16 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./navbar.css";
 import { useAuth } from "../AuthContext";
+import { ProviderModal } from "../ProviderModal";
 
 const NavigationBar = () => {
   const location = useLocation();
   const { isLoggedIn, logout } = useAuth();
-  
-  // Menü bezárása kattintáskor
+  const [isProviderModalOpen, setIsProviderModalOpen] = useState(false);
+
   const closeMenu = () => {
     const navbarCollapse = document.querySelector(".navbar-collapse") as HTMLElement;
     if (navbarCollapse.classList.contains("show")) {
@@ -17,11 +18,16 @@ const NavigationBar = () => {
     }
   };
 
-  // Ha az URL változik, bezárja a menüt
+  const handleAddProviderClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsProviderModalOpen(true);
+    closeMenu();
+  };
+
   useEffect(() => {
     closeMenu();
   }, [location]);
-  return (
+  return (<>
     <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
@@ -51,7 +57,16 @@ const NavigationBar = () => {
               </a>
               <ul className="dropdown-menu">
                 <li><NavLink to="/about-one" className="dropdown-item">Kimeno Megrendeles</NavLink></li>
-                <li><NavLink to="/about-two" className="dropdown-item">Bejovo Megrendeles</NavLink></li>
+                <li><NavLink to="/addOrder" className="dropdown-item">Bejovo Megrendeles</NavLink></li>
+                <li>
+                    <a 
+                      href="#" 
+                      className="dropdown-item" 
+                      onClick={handleAddProviderClick}
+                    >
+                      Beszallito hozzaadasa
+                    </a>
+                  </li>
               </ul>
             </li>
             <li className="nav-item">
@@ -96,6 +111,15 @@ const NavigationBar = () => {
         </div>
       </div>
     </nav>
+    <ProviderModal 
+    isOpen={isProviderModalOpen}
+    onClose={() => setIsProviderModalOpen(false)}
+    onSuccess={() => {
+      setIsProviderModalOpen(false);
+      // You can add any success logic here, like showing a toast notification
+    }}
+  />
+  </>
   );
 };
 
