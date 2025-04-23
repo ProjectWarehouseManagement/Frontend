@@ -150,437 +150,406 @@ const OrdersComponent = () => {
 
   if (error) {
     return (
-      <div className="max-w-md mx-auto mt-10 p-6 bg-red-50 rounded-lg shadow">
+      <div className="container mt-3 p-4 bg-danger bg-opacity-10 rounded shadow-sm mx-auto" style={{ maxWidth: '500px' }}>
         <button
           onClick={() => {
             setRefreshKey(prev => prev + 1);
           }}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="btn btn-primary mt-3"
         >
           Try Again
         </button>
-        <h2 className="text-xl font-semibold text-red-800">Error</h2>
-        <p className="mt-2 text-red-600">{error}</p>
-
+        <h2 className="text-danger mt-3 fw-semibold">Error</h2>
+        <p className="mt-2 text-danger">{error}</p>
       </div>
     );
   }
-
+  
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '256px' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
     );
   }
-
+  
   if (orders.length === 0 && !loading) {
     return (
-      <div className="max-w-md mx-auto mt-10 p-6 bg-blue-50 rounded-lg shadow">
-        <h2 className="text-xl font-semibold text-blue-800">No Orders Found</h2>
-        <p className="mt-2 text-blue-600">There are no orders to display at this time.</p>
+      <div className="container mt-3 p-4 bg-primary bg-opacity-10 rounded shadow-sm mx-auto" style={{ maxWidth: '500px' }}>
+        <h2 className="text-primary fw-semibold">No Orders Found</h2>
+        <p className="mt-2 text-primary">There are no orders to display at this time.</p>
         <button
           onClick={() => {
             setRefreshKey(prev => prev + 1);
           }}
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="btn btn-primary mt-3"
         >
           Refresh
         </button>
       </div>
     );
   }
-
+  
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Orders</h1>
-
-
-      <div className="space-y-8">
+    <div className="container p-3">
+      <h1 className="h2 fw-bold mb-4">Orders</h1>
+  
+      <div className="mb-4">
         {orders.map((order) => (
-          <div key={order.id} className="border rounded-lg p-4 shadow-sm">
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex space-x-2">
-                <h2 className="text-xl font-semibold">Order #{order.id}</h2>
-                <button
-                  onClick={() => setEditingOrder(order)}
-                  className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteOrder(order.id)}
-                  className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
-                >
-                  Delete
-                </button>
-                <p className="text-gray-600">
-                  Date: {new Date(order.orderDate).toLocaleDateString()}
-                </p>
-                <p className="text-gray-600">Provider: {order.provider.name}</p>
-              </div>
-            </div>
-
-            {order.orderDetails.length > 0 ? (
-              <>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200 border border-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Product
-                        </th>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Quantity
-                        </th>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Unit Price
-                        </th>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Line Total
-                        </th>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Shipping
-                        </th>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Expected Date
-                        </th>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Warehouse
-                        </th>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Shipping to
-                        </th>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Subtotal
-                        </th>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Shipping cost
-                        </th>
-                        <th className="px-8 py-4 text-left text-sm font-medium text-gray-500 uppercase tracking-wider border border-gray-200">
-                          Total
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {order.orderDetails.map((detail) => (
-                        <tr key={detail.id}>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            {detail.product?.name || `Product ${detail.productId}`}
-                          </td>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            {detail.OrderQuantity}
-                          </td>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            ${detail.price.toFixed(2)}
-                          </td>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            ${(detail.price * detail.OrderQuantity).toFixed(2)}
-                          </td>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            ${detail.shippingCost.toFixed(2)}
-                          </td>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            {new Date(detail.ExpectedDate).toLocaleDateString()}
-                          </td>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            {detail.warehouse?.name || `Warehouse ${detail.warehouseId}`}
-                          </td>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            {detail.address?.street}, {detail.address?.city}, {detail.address?.postalCode}
-                          </td>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            HUF {(detail.price * detail.OrderQuantity).toFixed(2)}
-                          </td>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            HUF {detail.shippingCost.toFixed(2)}
-                          </td>
-                          <td className="px-8 py-4 whitespace-nowrap border border-gray-200">
-                            HUF {(detail.price * detail.OrderQuantity + detail.shippingCost).toFixed(2)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+          <div key={order.id} className="card mb-4">
+            <div className="card-body">
+              <div className="d-flex justify-content-between align-items-start mb-3">
+                <div className="d-flex flex-wrap gap-2 align-items-center">
+                  <h2 className="h5 fw-semibold mb-0">Order #{order.id}</h2>
+                  <button
+                    onClick={() => setEditingOrder(order)}
+                    className="btn btn-warning btn-sm text-white"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteOrder(order.id)}
+                    className="btn btn-danger btn-sm"
+                  >
+                    Delete
+                  </button>
+                  <span className="text-muted">
+                    Date: {new Date(order.orderDate).toLocaleDateString()}
+                  </span>
+                  <span className="text-muted">Provider: {order.provider.name}</span>
                 </div>
-              </>
-            ) : (
-              <div className="py-4 text-center text-gray-500">
-                This order has no details
               </div>
-            )}
+  
+              {order.orderDetails.length > 0 ? (
+                <>
+                  <div className="table-responsive">
+                    <table className="table table-bordered">
+                      <thead className="table-light">
+                        <tr>
+                          <th className="text-nowrap">Product</th>
+                          <th className="text-nowrap">Quantity</th>
+                          <th className="text-nowrap">Unit Price</th>
+                          <th className="text-nowrap">Line Total</th>
+                          <th className="text-nowrap">Shipping</th>
+                          <th className="text-nowrap">Expected Date</th>
+                          <th className="text-nowrap">Warehouse</th>
+                          <th className="text-nowrap">Shipping to</th>
+                          <th className="text-nowrap">Subtotal</th>
+                          <th className="text-nowrap">Shipping cost</th>
+                          <th className="text-nowrap">Total</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {order.orderDetails.map((detail) => (
+                          <tr key={detail.id}>
+                            <td>{detail.product?.name || `Product ${detail.productId}`}</td>
+                            <td>{detail.OrderQuantity}</td>
+                            <td>${detail.price.toFixed(2)}</td>
+                            <td>${(detail.price * detail.OrderQuantity).toFixed(2)}</td>
+                            <td>${detail.shippingCost.toFixed(2)}</td>
+                            <td>{new Date(detail.ExpectedDate).toLocaleDateString()}</td>
+                            <td>{detail.warehouse?.name || `Warehouse ${detail.warehouseId}`}</td>
+                            <td>{detail.address?.street}, {detail.address?.city}, {detail.address?.postalCode}</td>
+                            <td>HUF {(detail.price * detail.OrderQuantity).toFixed(2)}</td>
+                            <td>HUF {detail.shippingCost.toFixed(2)}</td>
+                            <td>HUF {(detail.price * detail.OrderQuantity + detail.shippingCost).toFixed(2)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : (
+                <div className="text-center text-muted py-3">
+                  This order has no details
+                </div>
+              )}
+            </div>
           </div>
         ))}
-
-        {editingOrder && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-              <h3 className="text-lg font-medium mb-4">Edit Order #{editingOrder.id}</h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Order Fields */}
-                <div className="space-y-4">
-                  <h4 className="font-medium text-gray-700">Order Information</h4>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Order Date</label>
-                    <input
-                      type="date"
-                      value={editingOrder.orderDate.split('T')[0]}
-                      onChange={(e) => setEditingOrder({
-                        ...editingOrder,
-                        orderDate: new Date(e.target.value).toISOString()
-                      })}
-                      className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">Provider</label>
-                    <select
-                      value={editingOrder.providerId}  // Add this to control the selected value
-                      onChange={(e) => {
-                        const selectedProviderId = parseInt(e.target.value);
-                        const selectedProvider = providers?.find(p => p.id === selectedProviderId);
-
-                        setEditingOrder({
+      </div>
+  
+      {editingOrder && (
+        <div className="modal d-block bg-dark bg-opacity-50" style={{ zIndex: 1050 }}>
+          <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Edit Order #{editingOrder.id}</h5>
+              </div>
+              <div className="modal-body">
+                <div className="row">
+                  {/* Order Fields */}
+                  <div className="col-md-6">
+                    <h6 className="fw-medium text-muted">Order Information</h6>
+  
+                    <div className="mb-3">
+                      <label className="form-label">Order Date</label>
+                      <input
+                        type="date"
+                        value={editingOrder.orderDate.split('T')[0]}
+                        onChange={(e) => setEditingOrder({
                           ...editingOrder,
-                          providerId: selectedProviderId,
-                          provider: {
-                            id: selectedProviderId,
-                            name: selectedProvider?.name || editingOrder.provider.name
-                          }
-                        });
-                      }}
-                      className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                    >
-                      {providers?.map((provider) => (
-                        <option key={provider.id} value={provider.id}>
-                          {provider.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {/* Order Details Fields */}
-                <div className="space-y-4">
-                  <h4 className="font-medium text-gray-700">Order Details</h4>
-
-                  {editingOrder.orderDetails.map((detail, index) => (
-                    <div key={detail.id} className="border p-3 rounded-lg">
-                      <div className="mb-3">
-                        <label className="block text-sm font-medium text-gray-700">Product</label>
-                        <select
-                          value={detail.productId}
-                          onChange={(e) => {
-                            const updatedDetails = [...editingOrder.orderDetails];
-                            updatedDetails[index] = {
-                              ...updatedDetails[index],
-                              productId: parseInt(e.target.value),
-                              product: {
-                                ...updatedDetails[index].product,
-                                id: parseInt(e.target.value),
-                                name: updatedDetails[index].product?.name || 'Default Product Name'
-                              }
-                            };
-                            setEditingOrder({
-                              ...editingOrder,
-                              orderDetails: updatedDetails
-                            });
-                          }}
-                          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                        >
-                          <option value={detail.productId}>
-                            {detail.product?.name || `Product ${detail.productId}`}
-                          </option>
-                        </select>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">Quantity</label>
-                          <input
-                            type="number"
-                            value={detail.OrderQuantity}
-                            onChange={(e) => {
-                              const updatedDetails = [...editingOrder.orderDetails];
-                              updatedDetails[index].OrderQuantity = parseInt(e.target.value);
-                              setEditingOrder({
-                                ...editingOrder,
-                                orderDetails: updatedDetails
-                              });
-                            }}
-                            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">Price</label>
-                          <input
-                            type="number"
-                            step="0.01"
-                            value={detail.price}
-                            onChange={(e) => {
-                              const updatedDetails = [...editingOrder.orderDetails];
-                              updatedDetails[index].price = parseFloat(e.target.value);
-                              setEditingOrder({
-                                ...editingOrder,
-                                orderDetails: updatedDetails
-                              });
-                            }}
-                            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3 mt-3">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">Shipping Cost</label>
-                          <input
-                            type="number"
-                            step="0.01"
-                            value={detail.shippingCost}
-                            onChange={(e) => {
-                              const updatedDetails = [...editingOrder.orderDetails];
-                              updatedDetails[index].shippingCost = parseFloat(e.target.value);
-                              setEditingOrder({
-                                ...editingOrder,
-                                orderDetails: updatedDetails
-                              });
-                            }}
-                            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">Expected Date</label>
-                          <input
-                            type="date"
-                            value={detail.ExpectedDate.split('T')[0]}
-                            onChange={(e) => {
-                              const updatedDetails = [...editingOrder.orderDetails];
-                              updatedDetails[index].ExpectedDate = new Date(e.target.value).toISOString();
-                              setEditingOrder({
-                                ...editingOrder,
-                                orderDetails: updatedDetails
-                              });
-                            }}
-                            className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="mt-3">
-                        <label className="block text-sm font-medium text-gray-700">Warehouse</label>
-                        <select
-                          value={detail.warehouseId}
-                          onChange={(e) => {
-                            const updatedDetails = [...editingOrder.orderDetails];
-                            updatedDetails[index] = {
-                              ...updatedDetails[index],
-                              warehouseId: parseInt(e.target.value),
-                              warehouse: {
-                                ...updatedDetails[index].warehouse,
-                                id: parseInt(e.target.value),
-                                name: updatedDetails[index].warehouse?.name || 'Default Warehouse Name'
-                              }
-                            };
-                            setEditingOrder({
-                              ...editingOrder,
-                              orderDetails: updatedDetails
-                            });
-                          }}
-                          className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-                        >
-                          <option value={detail.warehouseId}>
-                            {detail.warehouse?.name || `Warehouse ${detail.warehouseId}`}
-                          </option>
-                        </select>
-                      </div>
-
-                      <div className="mt-3">
-                        <label className="block text-sm font-medium text-gray-700">Shipping Address</label>
-                        <div className="grid grid-cols-3 gap-2 mt-1">
-                          <input
-                            type="text"
-                            placeholder="Street"
-                            value={detail.address?.street || ''}
-                            onChange={(e) => {
-                              const updatedDetails = [...editingOrder.orderDetails];
-                              updatedDetails[index].address = {
-                                ...(updatedDetails[index].address || { id: 0, city: '', postalCode: '' }),
-                                street: e.target.value
-                              };
-                              setEditingOrder({
-                                ...editingOrder,
-                                orderDetails: updatedDetails
-                              });
-                            }}
-                            className="border border-gray-300 rounded-md p-2"
-                          />
-                          <input
-                            type="text"
-                            placeholder="City"
-                            value={detail.address?.city || ''}
-                            onChange={(e) => {
-                              const updatedDetails = [...editingOrder.orderDetails];
-                              updatedDetails[index].address = {
-                                ...(updatedDetails[index].address || { id: 0, street: '', postalCode: '' }),
-                                city: e.target.value
-                              };
-                              setEditingOrder({
-                                ...editingOrder,
-                                orderDetails: updatedDetails
-                              });
-                            }}
-                            className="border border-gray-300 rounded-md p-2"
-                          />
-                          <input
-                            type="text"
-                            placeholder="Postal Code"
-                            value={detail.address?.postalCode || ''}
-                            onChange={(e) => {
-                              const updatedDetails = [...editingOrder.orderDetails];
-                              updatedDetails[index].address = {
-                                ...(updatedDetails[index].address || { id: 0, street: '', city: '' }),
-                                postalCode: e.target.value
-                              };
-                              setEditingOrder({
-                                ...editingOrder,
-                                orderDetails: updatedDetails
-                              });
-                            }}
-                            className="border border-gray-300 rounded-md p-2"
-                          />
-                        </div>
-                      </div>
+                          orderDate: new Date(e.target.value).toISOString()
+                        })}
+                        className="form-control"
+                      />
                     </div>
-                  ))}
+  
+                    <div className="mb-3">
+                      <label className="form-label">Provider</label>
+                      <select
+                        value={editingOrder.providerId}
+                        onChange={(e) => {
+                          const selectedProviderId = parseInt(e.target.value);
+                          const selectedProvider = providers?.find(p => p.id === selectedProviderId);
+  
+                          setEditingOrder({
+                            ...editingOrder,
+                            providerId: selectedProviderId,
+                            provider: {
+                              id: selectedProviderId,
+                              name: selectedProvider?.name || editingOrder.provider.name
+                            }
+                          });
+                        }}
+                        className="form-select"
+                      >
+                        {providers?.map((provider) => (
+                          <option key={provider.id} value={provider.id}>
+                            {provider.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+  
+                  {/* Order Details Fields */}
+                  <div className="col-md-6">
+                    <h6 className="fw-medium text-muted">Order Details</h6>
+  
+                    {editingOrder.orderDetails.map((detail, index) => (
+                      <div key={detail.id} className="border p-3 rounded mb-3">
+                        <div className="mb-3">
+                          <label className="form-label">Product</label>
+                          <select
+                            value={detail.productId}
+                            onChange={(e) => {
+                              const updatedDetails = [...editingOrder.orderDetails];
+                              updatedDetails[index] = {
+                                ...updatedDetails[index],
+                                productId: parseInt(e.target.value),
+                                product: {
+                                  ...updatedDetails[index].product,
+                                  id: parseInt(e.target.value),
+                                  name: updatedDetails[index].product?.name || 'Default Product Name'
+                                }
+                              };
+                              setEditingOrder({
+                                ...editingOrder,
+                                orderDetails: updatedDetails
+                              });
+                            }}
+                            className="form-select"
+                          >
+                            <option value={detail.productId}>
+                              {detail.product?.name || `Product ${detail.productId}`}
+                            </option>
+                          </select>
+                        </div>
+  
+                        <div className="row g-2 mb-2">
+                          <div className="col">
+                            <label className="form-label">Quantity</label>
+                            <input
+                              type="number"
+                              value={detail.OrderQuantity}
+                              onChange={(e) => {
+                                const updatedDetails = [...editingOrder.orderDetails];
+                                updatedDetails[index].OrderQuantity = parseInt(e.target.value);
+                                setEditingOrder({
+                                  ...editingOrder,
+                                  orderDetails: updatedDetails
+                                });
+                              }}
+                              className="form-control"
+                            />
+                          </div>
+  
+                          <div className="col">
+                            <label className="form-label">Price</label>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={detail.price}
+                              onChange={(e) => {
+                                const updatedDetails = [...editingOrder.orderDetails];
+                                updatedDetails[index].price = parseFloat(e.target.value);
+                                setEditingOrder({
+                                  ...editingOrder,
+                                  orderDetails: updatedDetails
+                                });
+                              }}
+                              className="form-control"
+                            />
+                          </div>
+                        </div>
+  
+                        <div className="row g-2 mb-2">
+                          <div className="col">
+                            <label className="form-label">Shipping Cost</label>
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={detail.shippingCost}
+                              onChange={(e) => {
+                                const updatedDetails = [...editingOrder.orderDetails];
+                                updatedDetails[index].shippingCost = parseFloat(e.target.value);
+                                setEditingOrder({
+                                  ...editingOrder,
+                                  orderDetails: updatedDetails
+                                });
+                              }}
+                              className="form-control"
+                            />
+                          </div>
+  
+                          <div className="col">
+                            <label className="form-label">Expected Date</label>
+                            <input
+                              type="date"
+                              value={detail.ExpectedDate.split('T')[0]}
+                              onChange={(e) => {
+                                const updatedDetails = [...editingOrder.orderDetails];
+                                updatedDetails[index].ExpectedDate = new Date(e.target.value).toISOString();
+                                setEditingOrder({
+                                  ...editingOrder,
+                                  orderDetails: updatedDetails
+                                });
+                              }}
+                              className="form-control"
+                            />
+                          </div>
+                        </div>
+  
+                        <div className="mb-2">
+                          <label className="form-label">Warehouse</label>
+                          <select
+                            value={detail.warehouseId}
+                            onChange={(e) => {
+                              const updatedDetails = [...editingOrder.orderDetails];
+                              updatedDetails[index] = {
+                                ...updatedDetails[index],
+                                warehouseId: parseInt(e.target.value),
+                                warehouse: {
+                                  ...updatedDetails[index].warehouse,
+                                  id: parseInt(e.target.value),
+                                  name: updatedDetails[index].warehouse?.name || 'Default Warehouse Name'
+                                }
+                              };
+                              setEditingOrder({
+                                ...editingOrder,
+                                orderDetails: updatedDetails
+                              });
+                            }}
+                            className="form-select"
+                          >
+                            <option value={detail.warehouseId}>
+                              {detail.warehouse?.name || `Warehouse ${detail.warehouseId}`}
+                            </option>
+                          </select>
+                        </div>
+  
+                        <div>
+                          <label className="form-label">Shipping Address</label>
+                          <div className="row g-2">
+                            <div className="col">
+                              <input
+                                type="text"
+                                placeholder="Street"
+                                value={detail.address?.street || ''}
+                                onChange={(e) => {
+                                  const updatedDetails = [...editingOrder.orderDetails];
+                                  updatedDetails[index].address = {
+                                    ...(updatedDetails[index].address || { id: 0, city: '', postalCode: '' }),
+                                    street: e.target.value
+                                  };
+                                  setEditingOrder({
+                                    ...editingOrder,
+                                    orderDetails: updatedDetails
+                                  });
+                                }}
+                                className="form-control"
+                              />
+                            </div>
+                            <div className="col">
+                              <input
+                                type="text"
+                                placeholder="City"
+                                value={detail.address?.city || ''}
+                                onChange={(e) => {
+                                  const updatedDetails = [...editingOrder.orderDetails];
+                                  updatedDetails[index].address = {
+                                    ...(updatedDetails[index].address || { id: 0, street: '', postalCode: '' }),
+                                    city: e.target.value
+                                  };
+                                  setEditingOrder({
+                                    ...editingOrder,
+                                    orderDetails: updatedDetails
+                                  });
+                                }}
+                                className="form-control"
+                              />
+                            </div>
+                            <div className="col">
+                              <input
+                                type="text"
+                                placeholder="Postal Code"
+                                value={detail.address?.postalCode || ''}
+                                onChange={(e) => {
+                                  const updatedDetails = [...editingOrder.orderDetails];
+                                  updatedDetails[index].address = {
+                                    ...(updatedDetails[index].address || { id: 0, street: '', city: '' }),
+                                    postalCode: e.target.value
+                                  };
+                                  setEditingOrder({
+                                    ...editingOrder,
+                                    orderDetails: updatedDetails
+                                  });
+                                }}
+                                className="form-control"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-
-              <div className="flex justify-end space-x-4 mt-6">
+              <div className="modal-footer">
                 <button
                   onClick={() => setEditingOrder(null)}
-                  className="px-4 py-2 border border-gray-300 rounded"
+                  className="btn btn-outline-secondary"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => handleUpdateOrder(editingOrder.id, editingOrder)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                  className="btn btn-primary"
                 >
                   Save Changes
                 </button>
               </div>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+  
       <button
         onClick={() => setIsModalOpen(true)}
-        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mt-4"
+        className="btn btn-primary mt-3"
       >
         Add Provider
       </button>

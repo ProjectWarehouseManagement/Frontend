@@ -336,29 +336,41 @@ const AddOrderForm: React.FC = () => {
   };
 
   return (
-    <div className="order-form-container p-4">
+    <div className="container p-4">
       <h2 className="mb-4">Create New Order</h2>
       
-      {error && <Alert variant="danger" className="mb-4">{error}</Alert>}
-      {success && <Alert variant="success" className="mb-4">{success}</Alert>}
+      {error && (
+        <div className="alert alert-danger mb-4" role="alert">
+          {error}
+        </div>
+      )}
+      {success && (
+        <div className="alert alert-success mb-4" role="alert">
+          {success}
+        </div>
+      )}
       
-      <Form onSubmit={handleSubmit}>
-        <Row className="mb-4">
-          <Col md={6}>
-            <Form.Group controlId="orderDate">
-              <Form.Label>Order Date</Form.Label>
-              <Form.Control
+      <form onSubmit={handleSubmit}>
+        <div className="row mb-4">
+          <div className="col-md-6">
+            <div className="mb-3">
+              <label htmlFor="orderDate" className="form-label">Order Date</label>
+              <input
                 type="date"
+                className="form-control"
+                id="orderDate"
                 value={orderDate}
                 onChange={(e) => setOrderDate(e.target.value)}
                 required
               />
-            </Form.Group>
-          </Col>
-          <Col md={6}>
-            <Form.Group controlId="provider">
-              <Form.Label>Provider</Form.Label>
-              <Form.Select
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="mb-3">
+              <label htmlFor="provider" className="form-label">Provider</label>
+              <select
+                className="form-select"
+                id="provider"
                 value={providerId}
                 onChange={(e) => setProviderId(Number(e.target.value))}
                 disabled={isLoading || providers.length === 0}
@@ -369,34 +381,36 @@ const AddOrderForm: React.FC = () => {
                     {provider.name} - {provider.email}
                   </option>
                 ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
-        </Row>
-
-        <Row className="mb-4">
-          <Col>
-            <Form.Group controlId="productUpload">
-              <Form.Label>Upload Products from Excel</Form.Label>
-              <Form.Control
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <div className="row mb-4">
+          <div className="col">
+            <div className="mb-3">
+              <label htmlFor="productUpload" className="form-label">Upload Products from Excel</label>
+              <input
                 type="file"
+                className="form-control"
+                id="productUpload"
                 accept=".xlsx,.xls"
                 onChange={handleFileUpload}
                 disabled={isLoading}
               />
-              <Form.Text className="text-muted">
+              <div className="form-text">
                 Upload an Excel file with product barcodes
-              </Form.Text>
-            </Form.Group>
-          </Col>
-        </Row>
-
+              </div>
+            </div>
+          </div>
+        </div>
+  
         {products.length > 0 && (
-          <Row className="mb-4">
-            <Col>
+          <div className="row mb-4">
+            <div className="col">
               <h5>Available Products</h5>
               <div className="table-responsive">
-                <Table striped bordered hover>
+                <table className="table table-striped table-bordered">
                   <thead>
                     <tr>
                       <th>Name</th>
@@ -412,30 +426,29 @@ const AddOrderForm: React.FC = () => {
                         <td>{product.barcode}</td>
                         <td>{product.unitPrice} Ft</td>
                         <td>
-                          <Button
-                            size="sm"
-                            variant="primary"
+                          <button
+                            className="btn btn-primary btn-sm"
                             onClick={() => addProductToOrder(product)}
                             disabled={selectedProducts.some(p => p.productId === product.id)}
                           >
                             Add to Order
-                          </Button>
+                          </button>
                         </td>
                       </tr>
                     ))}
                   </tbody>
-                </Table>
+                </table>
               </div>
-            </Col>
-          </Row>
+            </div>
+          </div>
         )}
-
+  
         {selectedProducts.length > 0 && (
-          <Row className="mb-4">
-            <Col>
+          <div className="row mb-4">
+            <div className="col">
               <h5>Order Items</h5>
               <div className="table-responsive">
-                <Table striped bordered hover>
+                <table className="table table-striped table-bordered">
                   <thead>
                     <tr>
                       <th>Product</th>
@@ -455,8 +468,9 @@ const AddOrderForm: React.FC = () => {
                         <tr key={index}>
                           <td>{product?.name || 'Product'}</td>
                           <td>
-                            <Form.Control
+                            <input
                               type="number"
+                              className="form-control"
                               min="0"
                               step="0.01"
                               value={item.price}
@@ -465,8 +479,9 @@ const AddOrderForm: React.FC = () => {
                             />
                           </td>
                           <td>
-                            <Form.Control
+                            <input
                               type="number"
+                              className="form-control"
                               min="0"
                               step="0.01"
                               value={item.shippingCost}
@@ -475,8 +490,9 @@ const AddOrderForm: React.FC = () => {
                             />
                           </td>
                           <td>
-                            <Form.Control
+                            <input
                               type="number"
+                              className="form-control"
                               min="1"
                               value={item.OrderQuantity}
                               onChange={(e) => updateProduct(index, 'OrderQuantity', Number(e.target.value))}
@@ -484,15 +500,17 @@ const AddOrderForm: React.FC = () => {
                             />
                           </td>
                           <td>
-                            <Form.Control
+                            <input
                               type="date"
+                              className="form-control"
                               value={item.ExpectedDate}
                               onChange={(e) => updateProduct(index, 'ExpectedDate', e.target.value)}
                               required
                             />
                           </td>
                           <td>
-                            <Form.Select
+                            <select
+                              className="form-select"
                               value={item.addressId}
                               onChange={(e) => updateProduct(index, 'addressId', Number(e.target.value))}
                               required
@@ -502,10 +520,11 @@ const AddOrderForm: React.FC = () => {
                                   {address.street}, {address.city}
                                 </option>
                               ))}
-                            </Form.Select>
+                            </select>
                           </td>
                           <td>
-                            <Form.Select
+                            <select
+                              className="form-select"
                               value={item.warehouseId}
                               onChange={(e) => updateProduct(index, 'warehouseId', Number(e.target.value))}
                               required
@@ -515,53 +534,52 @@ const AddOrderForm: React.FC = () => {
                                   {warehouse.name}
                                 </option>
                               ))}
-                            </Form.Select>
+                            </select>
                           </td>
                           <td>
-                            <Button
-                              variant="danger"
-                              size="sm"
+                            <button
+                              className="btn btn-danger btn-sm"
                               onClick={() => removeProduct(index)}
                             >
                               Remove
-                            </Button>
+                            </button>
                           </td>
                         </tr>
                       );
                     })}
                   </tbody>
-                </Table>
+                </table>
               </div>
-            </Col>
-          </Row>
+            </div>
+          </div>
         )}
-
+  
         <div className="d-flex justify-content-between mt-4">
-          <Button 
-            variant="secondary" 
+          <button 
+            className="btn btn-secondary"
             onClick={resetForm}
             disabled={isLoading}
           >
             Reset Form
-          </Button>
-          <Button
-            variant="primary"
+          </button>
+          <button
+            className="btn btn-primary"
             type="submit"
             disabled={isLoading || selectedProducts.length === 0}
           >
             {isLoading ? (
               <>
-                <Spinner as="span" size="sm" animation="border" role="status" />
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 <span className="ms-2">Creating Order...</span>
               </>
             ) : (
               'Create Order'
             )}
-          </Button>
+          </button>
         </div>
-      </Form>
+      </form>
     </div>
-  );
-};
+)};
+
 
 export default AddOrderForm;
