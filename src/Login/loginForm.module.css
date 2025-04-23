@@ -13,7 +13,7 @@
 .formWrapper {
   display: flex;
   flex-direction: column;
-  background: hsla(220, 30%, 10%, 0.9);;
+  background: hsla(220, 30%, 10%, 0.9);
   padding: 2rem;
   border-radius: 12px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
