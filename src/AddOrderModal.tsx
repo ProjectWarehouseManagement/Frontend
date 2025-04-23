@@ -200,16 +200,21 @@ const AddOrderForm: React.FC = () => {
                 });
               } else {
                 productsToUpload.push({
-                  ...convertToProduct({ Vonalkód: result.barcode } as ExcelProductRow)!,
+                  ...convertToProduct({ barcode: result.barcode } as ExcelProductRow)!,
                   barcode: result.barcode
                 });
               }
             } else {
               // Product needs to be uploaded
-              productsToUpload.push({
-                ...convertToProduct({ Vonalkód: result.barcode } as ExcelProductRow)!,
-                barcode: result.barcode
-              });
+              const prod = validProducts.find(product => product.barcode === result.barcode);
+              if (prod && prod.name) {
+                productsToUpload.push({
+                  ...prod,
+                  barcode: result.barcode
+                });
+              } else {
+                console.error('Invalid product data:', prod);
+              }
             }
           });
 
