@@ -56,7 +56,7 @@ const NavigationBar = () => {
                 Megrendelesek Hozzaadasa
               </a>
               <ul className="dropdown-menu">
-                <li><NavLink to="/about-one" className="dropdown-item">Kimeno Megrendeles</NavLink></li>
+                <li><NavLink to="/addDelivery" className="dropdown-item">Kimeno Megrendeles</NavLink></li>
                 <li><NavLink to="/addOrder" className="dropdown-item">Bejovo Megrendeles</NavLink></li>
                 <li>
                     <a 
@@ -73,7 +73,7 @@ const NavigationBar = () => {
               <NavLink to="/orders" className="nav-link">Minden bejovo megrendeles</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink to="/services" className="nav-link">Minden kimeno megrendeles</NavLink>
+              <NavLink to="/OutGoing" className="nav-link">Minden kimeno megrendeles</NavLink>
             </li>
             <li className="nav-item">
               <NavLink to="/gallery" className="nav-link">Aktiv szamlak</NavLink>
