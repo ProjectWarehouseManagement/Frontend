@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import ExcelReader from './ExcelReader';
 import { ProviderModal } from './ProviderModal';
 import { api } from './environments/api';
 import { useAuth } from './AuthContext';
@@ -15,8 +14,6 @@ type Order = {
   };
   orderDetails: OrderDetail[];
 };
-
-type OrderWithoutId = Omit<Order, 'id'>;
 
 type OrderDetail = {
   id: number;
@@ -43,6 +40,19 @@ type OrderDetail = {
   };
 };
 
+type Product = {
+  id: number;
+  name: string;
+  barcode: string;
+  unitPrice: number;
+  width: number;
+  height: number;
+  depth: number;
+  Weight: number;
+  Expiration: boolean;
+  ExpirationDate?: String;
+};
+
 type Provider = {
   id: number;
   name: string;
@@ -59,6 +69,11 @@ type address = {
   country: string;
 }
 
+type Warehouse = {
+  id: number;
+  name: string;
+}
+
 const OrdersComponent = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +82,9 @@ const OrdersComponent = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [providers, setProviders] = useState<Provider[] | null>(null);
+  const [products, setProducts] = useState<Product[] | null>(null); // Assuming you have a Product type defined somewhere
   const [addresses, setAddresses] = useState<address[] | null>(null);
+  const [warehouses, setWarehouses] = useState<Warehouse[] | null>(null); // Assuming you have a Warehouse type defined somewhere
   const { isLoggedIn } = useAuth();
 
   const handleDeleteOrder = async (orderId: number) => {
@@ -80,11 +97,33 @@ const OrdersComponent = () => {
   };
 
   // Update order function
-  const handleUpdateOrder = async (id: number, updatedOrder: OrderWithoutId) => {
+  const handleUpdateOrder = async (id: number, updatedOrder: Order) => {
     try {
-      const response = await api.patch(`/orders/${id}`, updatedOrder);
+      const orderDTO = {
+        orderDate: updatedOrder.orderDate,
+        providerId: updatedOrder.providerId,
+      };
+
+      const orderDetailsDTO = updatedOrder.orderDetails.map(detail => ({
+        id: detail.id,
+        price: detail.price,
+        shippingCost: detail.shippingCost,
+        OrderQuantity: detail.OrderQuantity,
+        ExpectedDate: detail.ExpectedDate,
+        productId: detail.productId,
+        addressId: detail.addressId,
+        warehouseId: detail.warehouseId
+      }));
+
+      //const WarehouseResponse = await api.patch(`/orders/warehouse/${id}`, warehouseDTO);
+      //await api.patch(`/orders/address/${id}`, addressDTO);
+      orderDetailsDTO.forEach(async (detail) => {
+        const { id, ...rest } = detail;
+        await api.patch(`/orders/orderDetails/${id}`, rest);
+      });
+      const OrderResponse = await api.patch(`/orders/${id}`, orderDTO);
       setOrders(orders.map(order =>
-        order.id === id ? response.data : order
+        order.id === id ? OrderResponse.data : order
       ));
       setEditingOrder(null);
     } catch (err) {
@@ -134,10 +173,40 @@ const OrdersComponent = () => {
     }
   }
 
+  const fetchWarehouses = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      const response = await api.get('/warehouses');
+      setWarehouses(response.data);
+    } catch (err) {
+      setError(err instanceof AxiosError ? err.message : 'An unknown error occurred');
+      setWarehouses([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const fetchProducts = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      const response = await api.get('/products');
+      setProducts(response.data);
+    } catch (err) {
+      setError(err instanceof AxiosError ? err.message : 'An unknown error occurred');
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchOrders();
     fetchProviders();
     fetchAddresses();
+    fetchWarehouses();
+    fetchProducts();
   }, [refreshKey]);
 
   useEffect(() => {
@@ -164,7 +233,7 @@ const OrdersComponent = () => {
       </div>
     );
   }
-  
+
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ height: '256px' }}>
@@ -174,7 +243,7 @@ const OrdersComponent = () => {
       </div>
     );
   }
-  
+
   if (orders.length === 0 && !loading) {
     return (
       <div className="container mt-3 p-4 bg-primary bg-opacity-10 rounded shadow-sm mx-auto" style={{ maxWidth: '500px' }}>
@@ -191,11 +260,11 @@ const OrdersComponent = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="container p-3">
       <h1 className="h2 fw-bold mb-4">Orders</h1>
-  
+
       <div className="mb-4">
         {orders.map((order) => (
           <div key={order.id} className="card mb-4">
@@ -221,7 +290,7 @@ const OrdersComponent = () => {
                   <span className="text-muted">Provider: {order.provider.name}</span>
                 </div>
               </div>
-  
+
               {order.orderDetails.length > 0 ? (
                 <>
                   <div className="table-responsive">
@@ -270,7 +339,7 @@ const OrdersComponent = () => {
           </div>
         ))}
       </div>
-  
+
       {editingOrder && (
         <div className="modal d-block bg-dark bg-opacity-50" style={{ zIndex: 1050 }}>
           <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
@@ -283,7 +352,7 @@ const OrdersComponent = () => {
                   {/* Order Fields */}
                   <div className="col-md-6">
                     <h6 className="fw-medium text-muted">Order Information</h6>
-  
+
                     <div className="mb-3">
                       <label className="form-label">Order Date</label>
                       <input
@@ -296,7 +365,7 @@ const OrdersComponent = () => {
                         className="form-control"
                       />
                     </div>
-  
+
                     <div className="mb-3">
                       <label className="form-label">Provider</label>
                       <select
@@ -304,7 +373,7 @@ const OrdersComponent = () => {
                         onChange={(e) => {
                           const selectedProviderId = parseInt(e.target.value);
                           const selectedProvider = providers?.find(p => p.id === selectedProviderId);
-  
+
                           setEditingOrder({
                             ...editingOrder,
                             providerId: selectedProviderId,
@@ -324,11 +393,11 @@ const OrdersComponent = () => {
                       </select>
                     </div>
                   </div>
-  
+
                   {/* Order Details Fields */}
                   <div className="col-md-6">
                     <h6 className="fw-medium text-muted">Order Details</h6>
-  
+
                     {editingOrder.orderDetails.map((detail, index) => (
                       <div key={detail.id} className="border p-3 rounded mb-3">
                         <div className="mb-3">
@@ -337,15 +406,19 @@ const OrdersComponent = () => {
                             value={detail.productId}
                             onChange={(e) => {
                               const updatedDetails = [...editingOrder.orderDetails];
+                              const selectedProductId = parseInt(e.target.value);
+                              const selectedProduct = products?.find(p => p.id === selectedProductId);
+
                               updatedDetails[index] = {
                                 ...updatedDetails[index],
-                                productId: parseInt(e.target.value),
-                                product: {
-                                  ...updatedDetails[index].product,
-                                  id: parseInt(e.target.value),
-                                  name: updatedDetails[index].product?.name || 'Default Product Name'
-                                }
+                                productId: selectedProductId,
+                                product: selectedProduct ? {
+                                  id: selectedProduct.id,
+                                  name: selectedProduct.name
+                                } : undefined,
+                                price: selectedProduct?.unitPrice || updatedDetails[index].price
                               };
+
                               setEditingOrder({
                                 ...editingOrder,
                                 orderDetails: updatedDetails
@@ -353,21 +426,25 @@ const OrdersComponent = () => {
                             }}
                             className="form-select"
                           >
-                            <option value={detail.productId}>
-                              {detail.product?.name || `Product ${detail.productId}`}
-                            </option>
+                            <option value="">Select a product</option>
+                            {products?.map((product) => (
+                              <option key={product.id} value={product.id}>
+                                {product.name} (HUF {product.unitPrice.toFixed(2)})
+                              </option>
+                            ))}
                           </select>
                         </div>
-  
+
                         <div className="row g-2 mb-2">
                           <div className="col">
                             <label className="form-label">Quantity</label>
                             <input
                               type="number"
+                              min="1"
                               value={detail.OrderQuantity}
                               onChange={(e) => {
                                 const updatedDetails = [...editingOrder.orderDetails];
-                                updatedDetails[index].OrderQuantity = parseInt(e.target.value);
+                                updatedDetails[index].OrderQuantity = parseInt(e.target.value) || 0;
                                 setEditingOrder({
                                   ...editingOrder,
                                   orderDetails: updatedDetails
@@ -376,16 +453,17 @@ const OrdersComponent = () => {
                               className="form-control"
                             />
                           </div>
-  
+
                           <div className="col">
-                            <label className="form-label">Price</label>
+                            <label className="form-label">Unit Price (HUF)</label>
                             <input
                               type="number"
                               step="0.01"
+                              min="0"
                               value={detail.price}
                               onChange={(e) => {
                                 const updatedDetails = [...editingOrder.orderDetails];
-                                updatedDetails[index].price = parseFloat(e.target.value);
+                                updatedDetails[index].price = parseFloat(e.target.value) || 0;
                                 setEditingOrder({
                                   ...editingOrder,
                                   orderDetails: updatedDetails
@@ -395,17 +473,18 @@ const OrdersComponent = () => {
                             />
                           </div>
                         </div>
-  
+
                         <div className="row g-2 mb-2">
                           <div className="col">
-                            <label className="form-label">Shipping Cost</label>
+                            <label className="form-label">Shipping Cost (HUF)</label>
                             <input
                               type="number"
                               step="0.01"
+                              min="0"
                               value={detail.shippingCost}
                               onChange={(e) => {
                                 const updatedDetails = [...editingOrder.orderDetails];
-                                updatedDetails[index].shippingCost = parseFloat(e.target.value);
+                                updatedDetails[index].shippingCost = parseFloat(e.target.value) || 0;
                                 setEditingOrder({
                                   ...editingOrder,
                                   orderDetails: updatedDetails
@@ -414,7 +493,7 @@ const OrdersComponent = () => {
                               className="form-control"
                             />
                           </div>
-  
+
                           <div className="col">
                             <label className="form-label">Expected Date</label>
                             <input
@@ -432,22 +511,25 @@ const OrdersComponent = () => {
                             />
                           </div>
                         </div>
-  
+
                         <div className="mb-2">
                           <label className="form-label">Warehouse</label>
                           <select
                             value={detail.warehouseId}
                             onChange={(e) => {
                               const updatedDetails = [...editingOrder.orderDetails];
+                              const selectedWarehouseId = parseInt(e.target.value);
+                              const selectedWarehouse = warehouses?.find(w => w.id === selectedWarehouseId);
+
                               updatedDetails[index] = {
                                 ...updatedDetails[index],
-                                warehouseId: parseInt(e.target.value),
-                                warehouse: {
-                                  ...updatedDetails[index].warehouse,
-                                  id: parseInt(e.target.value),
-                                  name: updatedDetails[index].warehouse?.name || 'Default Warehouse Name'
-                                }
+                                warehouseId: selectedWarehouseId,
+                                warehouse: selectedWarehouse ? {
+                                  id: selectedWarehouse.id,
+                                  name: selectedWarehouse.name
+                                } : undefined
                               };
+
                               setEditingOrder({
                                 ...editingOrder,
                                 orderDetails: updatedDetails
@@ -455,73 +537,49 @@ const OrdersComponent = () => {
                             }}
                             className="form-select"
                           >
-                            <option value={detail.warehouseId}>
-                              {detail.warehouse?.name || `Warehouse ${detail.warehouseId}`}
-                            </option>
+                            <option value="">Select a warehouse</option>
+                            {warehouses?.map((warehouse) => (
+                              <option key={warehouse.id} value={warehouse.id}>
+                                {warehouse.name}
+                              </option>
+                            ))}
                           </select>
                         </div>
-  
-                        <div>
+
+                        <div className="mb-2">
                           <label className="form-label">Shipping Address</label>
-                          <div className="row g-2">
-                            <div className="col">
-                              <input
-                                type="text"
-                                placeholder="Street"
-                                value={detail.address?.street || ''}
-                                onChange={(e) => {
-                                  const updatedDetails = [...editingOrder.orderDetails];
-                                  updatedDetails[index].address = {
-                                    ...(updatedDetails[index].address || { id: 0, city: '', postalCode: '' }),
-                                    street: e.target.value
-                                  };
-                                  setEditingOrder({
-                                    ...editingOrder,
-                                    orderDetails: updatedDetails
-                                  });
-                                }}
-                                className="form-control"
-                              />
-                            </div>
-                            <div className="col">
-                              <input
-                                type="text"
-                                placeholder="City"
-                                value={detail.address?.city || ''}
-                                onChange={(e) => {
-                                  const updatedDetails = [...editingOrder.orderDetails];
-                                  updatedDetails[index].address = {
-                                    ...(updatedDetails[index].address || { id: 0, street: '', postalCode: '' }),
-                                    city: e.target.value
-                                  };
-                                  setEditingOrder({
-                                    ...editingOrder,
-                                    orderDetails: updatedDetails
-                                  });
-                                }}
-                                className="form-control"
-                              />
-                            </div>
-                            <div className="col">
-                              <input
-                                type="text"
-                                placeholder="Postal Code"
-                                value={detail.address?.postalCode || ''}
-                                onChange={(e) => {
-                                  const updatedDetails = [...editingOrder.orderDetails];
-                                  updatedDetails[index].address = {
-                                    ...(updatedDetails[index].address || { id: 0, street: '', city: '' }),
-                                    postalCode: e.target.value
-                                  };
-                                  setEditingOrder({
-                                    ...editingOrder,
-                                    orderDetails: updatedDetails
-                                  });
-                                }}
-                                className="form-control"
-                              />
-                            </div>
-                          </div>
+                          <select
+                            value={detail.addressId}
+                            onChange={(e) => {
+                              const updatedDetails = [...editingOrder.orderDetails];
+                              const selectedAddressId = parseInt(e.target.value);
+                              const selectedAddress = addresses?.find(a => a.id === selectedAddressId);
+
+                              updatedDetails[index] = {
+                                ...updatedDetails[index],
+                                addressId: selectedAddressId,
+                                address: selectedAddress ? {
+                                  id: selectedAddress.id,
+                                  street: selectedAddress.street,
+                                  city: selectedAddress.city,
+                                  postalCode: selectedAddress.postalCode
+                                } : undefined
+                              };
+
+                              setEditingOrder({
+                                ...editingOrder,
+                                orderDetails: updatedDetails
+                              });
+                            }}
+                            className="form-select"
+                          >
+                            <option value="">Select an address</option>
+                            {addresses?.map((address) => (
+                              <option key={address.id} value={address.id}>
+                                {address.street}, {address.city}, {address.postalCode}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                       </div>
                     ))}
@@ -546,19 +604,6 @@ const OrdersComponent = () => {
           </div>
         </div>
       )}
-  
-      <button
-        onClick={() => setIsModalOpen(true)}
-        className="btn btn-primary mt-3"
-      >
-        Add Provider
-      </button>
-
-      <ProviderModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSuccess={() => setRefreshKey(prev => prev + 1)}
-      />
     </div>
   );
 };
