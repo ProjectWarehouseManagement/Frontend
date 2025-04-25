@@ -219,387 +219,726 @@ const OrdersComponent = () => {
 
   if (error) {
     return (
-      <div className="container mt-3 p-4 bg-danger bg-opacity-10 rounded shadow-sm mx-auto" style={{ maxWidth: '500px' }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '300px',
+        padding: '2rem',
+        borderRadius: '12px',
+        background: 'hsla(220, 30%, 10%, 0.9)',
+        maxWidth: '500px',
+        margin: '2rem auto',
+        boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.6), 0px 15px 35px rgba(0, 0, 0, 0.3)',
+        border: '1px solid hsla(0, 70%, 40%, 0.3)',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <h2 style={{
+          color: '#FF5252',
+          fontSize: '1.75rem',
+          marginBottom: '1rem'
+        }}>Error</h2>
+        <p style={{ color: '#FF5252', marginBottom: '1.5rem' }}>{error}</p>
         <button
-          onClick={() => {
-            setRefreshKey(prev => prev + 1);
+          onClick={() => setRefreshKey(prev => prev + 1)}
+          style={{
+            backgroundColor: 'hsla(220, 70%, 8%, 1)',
+            color: 'white',
+            padding: '12px 24px',
+            fontSize: '1rem',
+            border: '1px solid hsla(220, 70%, 20%, 1)',
+            borderRadius: '20px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
           }}
-          className="btn btn-primary mt-3"
+          onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
+          onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
         >
           Try Again
         </button>
-        <h2 className="text-danger mt-3 fw-semibold">Error</h2>
-        <p className="mt-2 text-danger">{error}</p>
       </div>
     );
   }
-
+  
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '256px' }}>
-        <div className="spinner-border text-primary" role="status">
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '256px',
+        background: 'hsla(220, 30%, 10%, 0.5)',
+        borderRadius: '12px',
+        margin: '2rem',
+        border: '1px solid hsla(220, 30%, 40%, 0.3)'
+      }}>
+        <div className="spinner-border" style={{ 
+          color: 'hsla(220, 70%, 60%, 1)',
+          width: '3rem',
+          height: '3rem'
+        }} role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
       </div>
     );
   }
-
+  
   if (orders.length === 0 && !loading) {
     return (
-      <div className="container mt-3 p-4 bg-primary bg-opacity-10 rounded shadow-sm mx-auto" style={{ maxWidth: '500px' }}>
-        <h2 className="text-primary fw-semibold">No Orders Found</h2>
-        <p className="mt-2 text-primary">There are no orders to display at this time.</p>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '300px',
+        padding: '2rem',
+        borderRadius: '12px',
+        background: 'hsla(220, 30%, 10%, 0.9)',
+        maxWidth: '500px',
+        margin: '2rem auto',
+        boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.6), 0px 15px 35px rgba(0, 0, 0, 0.3)',
+        border: '1px solid hsla(220, 30%, 40%, 0.3)',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <h2 style={{
+          color: 'hsla(220, 70%, 60%, 1)',
+          fontSize: '1.75rem',
+          marginBottom: '1rem'
+        }}>No Orders Found</h2>
+        <p style={{ marginBottom: '1.5rem' }}>There are no orders to display at this time.</p>
         <button
-          onClick={() => {
-            setRefreshKey(prev => prev + 1);
+          onClick={() => setRefreshKey(prev => prev + 1)}
+          style={{
+            backgroundColor: 'hsla(220, 70%, 8%, 1)',
+            color: 'white',
+            padding: '12px 24px',
+            fontSize: '1rem',
+            border: '1px solid hsla(220, 70%, 20%, 1)',
+            borderRadius: '20px',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease'
           }}
-          className="btn btn-primary mt-3"
+          onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
+          onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
         >
           Refresh
         </button>
       </div>
     );
   }
-
+  
   return (
-    <div className="container p-3">
-      <h1 className="h2 fw-bold mb-4">Orders</h1>
-
-      <div className="mb-4">
+    <div style={{
+      marginTop: '50px',
+      padding: '2rem',
+      background: 'radial-gradient(at 50% 50%, hsla(220, 30%, 15%, 1), hsla(220, 30%, 5%, 1))',
+      minHeight: '100vh',
+      color: 'white'
+    }}>
+      <h1 style={{
+        fontSize: '2rem',
+        fontWeight: 'bold',
+        marginBottom: '2rem',
+        color: 'white',
+        borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)',
+        paddingBottom: '1rem'
+      }}>Orders</h1>
+  
+      <div style={{ marginBottom: '2rem' }}>
         {orders.map((order) => (
-          <div key={order.id} className="card mb-4">
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-start mb-3">
-                <div className="d-flex flex-wrap gap-2 align-items-center">
-                  <h2 className="h5 fw-semibold mb-0">Order #{order.id}</h2>
-                  <button
-                    onClick={() => setEditingOrder(order)}
-                    className="btn btn-warning btn-sm text-white"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteOrder(order.id)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    Delete
-                  </button>
-                  <span className="text-muted">
-                    Date: {new Date(order.orderDate).toLocaleDateString()}
-                  </span>
-                  <span className="text-muted">Provider: {order.provider.name}</span>
-                </div>
+          <div key={order.id} style={{
+            background: 'hsla(220, 30%, 10%, 0.9)',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            marginBottom: '1.5rem',
+            boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.6), 0px 15px 35px rgba(0, 0, 0, 0.3)',
+            border: '1px solid hsla(220, 30%, 40%, 0.3)'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              marginBottom: '1.5rem',
+              flexWrap: 'wrap',
+              gap: '1rem'
+            }}>
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '1rem',
+                alignItems: 'center'
+              }}>
+                <h2 style={{
+                  fontSize: '1.25rem',
+                  fontWeight: '600',
+                  margin: 0,
+                  color: 'hsla(220, 70%, 60%, 1)'
+                }}>Order #{order.id}</h2>
+                <button
+                  onClick={() => setEditingOrder(order)}
+                  style={{
+                    backgroundColor: 'hsla(45, 100%, 40%, 1)',
+                    color: 'white',
+                    padding: '0.5rem 1rem',
+                    border: 'none',
+                    borderRadius: '20px',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 10px hsla(45, 100%, 50%, 0.8)'}
+                  onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeleteOrder(order.id)}
+                  style={{
+                    backgroundColor: 'hsla(0, 70%, 40%, 1)',
+                    color: 'white',
+                    padding: '0.5rem 1rem',
+                    border: 'none',
+                    borderRadius: '20px',
+                    cursor: 'pointer',
+                    fontSize: '0.875rem',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 10px hsla(0, 100%, 50%, 0.8)'}
+                  onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
+                >
+                  Delete
+                </button>
+                <span style={{ color: 'hsla(220, 30%, 70%, 1)' }}>
+                  Date: {new Date(order.orderDate).toLocaleDateString()}
+                </span>
+                <span style={{ color: 'hsla(220, 30%, 70%, 1)' }}>
+                  Provider: {order.provider.name}
+                </span>
               </div>
-
-              {order.orderDetails.length > 0 ? (
-                <>
-                  <div className="table-responsive">
-                    <table className="table table-bordered">
-                      <thead className="table-light">
-                        <tr>
-                          <th className="text-nowrap">Product</th>
-                          <th className="text-nowrap">Quantity</th>
-                          <th className="text-nowrap">Unit Price</th>
-                          <th className="text-nowrap">Line Total</th>
-                          <th className="text-nowrap">Shipping</th>
-                          <th className="text-nowrap">Expected Date</th>
-                          <th className="text-nowrap">Warehouse</th>
-                          <th className="text-nowrap">Shipping to</th>
-                          <th className="text-nowrap">Subtotal</th>
-                          <th className="text-nowrap">Shipping cost</th>
-                          <th className="text-nowrap">Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {order.orderDetails.map((detail) => (
-                          <tr key={detail.id}>
-                            <td>{detail.product?.name || `Product ${detail.productId}`}</td>
-                            <td>{detail.OrderQuantity}</td>
-                            <td>${detail.price.toFixed(2)}</td>
-                            <td>${(detail.price * detail.OrderQuantity).toFixed(2)}</td>
-                            <td>${detail.shippingCost.toFixed(2)}</td>
-                            <td>{new Date(detail.ExpectedDate).toLocaleDateString()}</td>
-                            <td>{detail.warehouse?.name || `Warehouse ${detail.warehouseId}`}</td>
-                            <td>{detail.address?.street}, {detail.address?.city}, {detail.address?.postalCode}</td>
-                            <td>HUF {(detail.price * detail.OrderQuantity).toFixed(2)}</td>
-                            <td>HUF {detail.shippingCost.toFixed(2)}</td>
-                            <td>HUF {(detail.price * detail.OrderQuantity + detail.shippingCost).toFixed(2)}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </>
-              ) : (
-                <div className="text-center text-muted py-3">
-                  This order has no details
-                </div>
-              )}
             </div>
+  
+            {order.orderDetails.length > 0 ? (
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{
+                  width: '100%',
+                  borderCollapse: 'collapse',
+                  color: 'white'
+                }}>
+                  <thead>
+                    <tr style={{
+                      backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
+                      borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
+                    }}>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Product</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Quantity</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Unit Price</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Line Total</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Expected Date</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Warehouse</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping to</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Subtotal</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping cost</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {order.orderDetails.map((detail) => (
+                      <tr key={detail.id} style={{
+                        borderBottom: '1px solid hsla(220, 30%, 40%, 0.1)'
+                      }}>
+                        <td style={{ padding: '0.75rem' }}>{detail.product?.name || `Product ${detail.productId}`}</td>
+                        <td style={{ padding: '0.75rem' }}>{detail.OrderQuantity}</td>
+                        <td style={{ padding: '0.75rem' }}>${detail.price.toFixed(2)}</td>
+                        <td style={{ padding: '0.75rem' }}>${(detail.price * detail.OrderQuantity).toFixed(2)}</td>
+                        <td style={{ padding: '0.75rem' }}>${detail.shippingCost.toFixed(2)}</td>
+                        <td style={{ padding: '0.75rem' }}>{new Date(detail.ExpectedDate).toLocaleDateString()}</td>
+                        <td style={{ padding: '0.75rem' }}>{detail.warehouse?.name || `Warehouse ${detail.warehouseId}`}</td>
+                        <td style={{ padding: '0.75rem' }}>{detail.address?.street}, {detail.address?.city}, {detail.address?.postalCode}</td>
+                        <td style={{ padding: '0.75rem' }}>HUF {(detail.price * detail.OrderQuantity).toFixed(2)}</td>
+                        <td style={{ padding: '0.75rem' }}>HUF {detail.shippingCost.toFixed(2)}</td>
+                        <td style={{ padding: '0.75rem' }}>HUF {(detail.price * detail.OrderQuantity + detail.shippingCost).toFixed(2)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div style={{
+                textAlign: 'center',
+                color: 'hsla(220, 30%, 70%, 1)',
+                padding: '1.5rem 0'
+              }}>
+                This order has no details
+              </div>
+            )}
           </div>
         ))}
       </div>
-
+  
       {editingOrder && (
-        <div className="modal d-block bg-dark bg-opacity-50" style={{ zIndex: 1050 }}>
-          <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Edit Order #{editingOrder.id}</h5>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  {/* Order Fields */}
-                  <div className="col-md-6">
-                    <h6 className="fw-medium text-muted">Order Information</h6>
-
-                    <div className="mb-3">
-                      <label className="form-label">Order Date</label>
-                      <input
-                        type="date"
-                        value={editingOrder.orderDate.split('T')[0]}
-                        onChange={(e) => setEditingOrder({
-                          ...editingOrder,
-                          orderDate: new Date(e.target.value).toISOString()
-                        })}
-                        className="form-control"
-                      />
-                    </div>
-
-                    <div className="mb-3">
-                      <label className="form-label">Provider</label>
-                      <select
-                        value={editingOrder.providerId}
-                        onChange={(e) => {
-                          const selectedProviderId = parseInt(e.target.value);
-                          const selectedProvider = providers?.find(p => p.id === selectedProviderId);
-
-                          setEditingOrder({
-                            ...editingOrder,
-                            providerId: selectedProviderId,
-                            provider: {
-                              id: selectedProviderId,
-                              name: selectedProvider?.name || editingOrder.provider.name
-                            }
-                          });
-                        }}
-                        className="form-select"
-                      >
-                        {providers?.map((provider) => (
-                          <option key={provider.id} value={provider.id}>
-                            {provider.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
+        <div className="modal-container" style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(0,0,0,0.7)',
+          zIndex: 1050,
+          backdropFilter: 'blur(5px)'
+        }}>
+          <div className="formWrapper" style={{
+            margin: '20px 0',
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '2rem',
+            borderRadius: '12px',
+            background: 'hsla(220, 30%, 10%, 0.95)',
+            width: '90%',
+            maxWidth: '900px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.6), 0px 15px 35px rgba(0, 0, 0, 0.3)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid hsla(220, 30%, 40%, 0.3)',
+            color: 'white'
+          }}>
+            <div className="modal-header" style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '1.5rem',
+              borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)',
+              paddingBottom: '1rem'
+            }}>
+              <h2 style={{
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                color: 'white',
+                margin: 0
+              }}>Edit Order #{editingOrder.id}</h2>
+              <button 
+                type="button" 
+                className="btn-close" 
+                onClick={() => setEditingOrder(null)}
+                style={{
+                  filter: 'invert(1)',
+                  cursor: 'pointer',
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  color: 'white'
+                }}
+              >×</button>
+            </div>
+  
+            <div className="modal-body">
+              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                <div style={{ flex: 1, minWidth: '300px' }}>
+                  <h6 style={{
+                    fontWeight: '600',
+                    color: 'hsla(220, 30%, 70%, 1)',
+                    marginBottom: '1rem',
+                    fontSize: '1.1rem'
+                  }}>Order Information</h6>
+  
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <label style={{
+                      display: 'block',
+                      marginBottom: '0.5rem',
+                      color: 'white'
+                    }}>Order Date</label>
+                    <input
+                      type="date"
+                      value={editingOrder.orderDate.split('T')[0]}
+                      onChange={(e) => setEditingOrder({
+                        ...editingOrder,
+                        orderDate: new Date(e.target.value).toISOString()
+                      })}
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        border: '1px solid #555',
+                        borderRadius: '5px',
+                        fontSize: '1rem',
+                        backgroundColor: 'black',
+                        color: 'white'
+                      }}
+                    />
                   </div>
-
-                  {/* Order Details Fields */}
-                  <div className="col-md-6">
-                    <h6 className="fw-medium text-muted">Order Details</h6>
-
-                    {editingOrder.orderDetails.map((detail, index) => (
-                      <div key={detail.id} className="border p-3 rounded mb-3">
-                        <div className="mb-3">
-                          <label className="form-label">Product</label>
-                          <select
-                            value={detail.productId}
-                            onChange={(e) => {
-                              const updatedDetails = [...editingOrder.orderDetails];
-                              const selectedProductId = parseInt(e.target.value);
-                              const selectedProduct = products?.find(p => p.id === selectedProductId);
-
-                              updatedDetails[index] = {
-                                ...updatedDetails[index],
-                                productId: selectedProductId,
-                                product: selectedProduct ? {
-                                  id: selectedProduct.id,
-                                  name: selectedProduct.name
-                                } : undefined,
-                                price: selectedProduct?.unitPrice || updatedDetails[index].price
-                              };
-
-                              setEditingOrder({
-                                ...editingOrder,
-                                orderDetails: updatedDetails
-                              });
-                            }}
-                            className="form-select"
-                          >
-                            <option value="">Select a product</option>
-                            {products?.map((product) => (
-                              <option key={product.id} value={product.id}>
-                                {product.name} (HUF {product.unitPrice.toFixed(2)})
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-
-                        <div className="row g-2 mb-2">
-                          <div className="col">
-                            <label className="form-label">Quantity</label>
-                            <input
-                              type="number"
-                              min="1"
-                              value={detail.OrderQuantity}
-                              onChange={(e) => {
-                                const updatedDetails = [...editingOrder.orderDetails];
-                                updatedDetails[index].OrderQuantity = parseInt(e.target.value) || 0;
-                                setEditingOrder({
-                                  ...editingOrder,
-                                  orderDetails: updatedDetails
-                                });
-                              }}
-                              className="form-control"
-                            />
-                          </div>
-
-                          <div className="col">
-                            <label className="form-label">Unit Price (HUF)</label>
-                            <input
-                              type="number"
-                              step="0.01"
-                              min="0"
-                              value={detail.price}
-                              onChange={(e) => {
-                                const updatedDetails = [...editingOrder.orderDetails];
-                                updatedDetails[index].price = parseFloat(e.target.value) || 0;
-                                setEditingOrder({
-                                  ...editingOrder,
-                                  orderDetails: updatedDetails
-                                });
-                              }}
-                              className="form-control"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="row g-2 mb-2">
-                          <div className="col">
-                            <label className="form-label">Shipping Cost (HUF)</label>
-                            <input
-                              type="number"
-                              step="0.01"
-                              min="0"
-                              value={detail.shippingCost}
-                              onChange={(e) => {
-                                const updatedDetails = [...editingOrder.orderDetails];
-                                updatedDetails[index].shippingCost = parseFloat(e.target.value) || 0;
-                                setEditingOrder({
-                                  ...editingOrder,
-                                  orderDetails: updatedDetails
-                                });
-                              }}
-                              className="form-control"
-                            />
-                          </div>
-
-                          <div className="col">
-                            <label className="form-label">Expected Date</label>
-                            <input
-                              type="date"
-                              value={detail.ExpectedDate.split('T')[0]}
-                              onChange={(e) => {
-                                const updatedDetails = [...editingOrder.orderDetails];
-                                updatedDetails[index].ExpectedDate = new Date(e.target.value).toISOString();
-                                setEditingOrder({
-                                  ...editingOrder,
-                                  orderDetails: updatedDetails
-                                });
-                              }}
-                              className="form-control"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="mb-2">
-                          <label className="form-label">Warehouse</label>
-                          <select
-                            value={detail.warehouseId}
-                            onChange={(e) => {
-                              const updatedDetails = [...editingOrder.orderDetails];
-                              const selectedWarehouseId = parseInt(e.target.value);
-                              const selectedWarehouse = warehouses?.find(w => w.id === selectedWarehouseId);
-
-                              updatedDetails[index] = {
-                                ...updatedDetails[index],
-                                warehouseId: selectedWarehouseId,
-                                warehouse: selectedWarehouse ? {
-                                  id: selectedWarehouse.id,
-                                  name: selectedWarehouse.name
-                                } : undefined
-                              };
-
-                              setEditingOrder({
-                                ...editingOrder,
-                                orderDetails: updatedDetails
-                              });
-                            }}
-                            className="form-select"
-                          >
-                            <option value="">Select a warehouse</option>
-                            {warehouses?.map((warehouse) => (
-                              <option key={warehouse.id} value={warehouse.id}>
-                                {warehouse.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-
-                        <div className="mb-2">
-                          <label className="form-label">Shipping Address</label>
-                          <select
-                            value={detail.addressId}
-                            onChange={(e) => {
-                              const updatedDetails = [...editingOrder.orderDetails];
-                              const selectedAddressId = parseInt(e.target.value);
-                              const selectedAddress = addresses?.find(a => a.id === selectedAddressId);
-
-                              updatedDetails[index] = {
-                                ...updatedDetails[index],
-                                addressId: selectedAddressId,
-                                address: selectedAddress ? {
-                                  id: selectedAddress.id,
-                                  street: selectedAddress.street,
-                                  city: selectedAddress.city,
-                                  postalCode: selectedAddress.postalCode
-                                } : undefined
-                              };
-
-                              setEditingOrder({
-                                ...editingOrder,
-                                orderDetails: updatedDetails
-                              });
-                            }}
-                            className="form-select"
-                          >
-                            <option value="">Select an address</option>
-                            {addresses?.map((address) => (
-                              <option key={address.id} value={address.id}>
-                                {address.street}, {address.city}, {address.postalCode}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                    ))}
+  
+                  <div style={{ marginBottom: '1.5rem' }}>
+                    <label style={{
+                      display: 'block',
+                      marginBottom: '0.5rem',
+                      color: 'white'
+                    }}>Provider</label>
+                    <select
+                      value={editingOrder.providerId}
+                      onChange={(e) => {
+                        const selectedProviderId = parseInt(e.target.value);
+                        const selectedProvider = providers?.find(p => p.id === selectedProviderId);
+  
+                        setEditingOrder({
+                          ...editingOrder,
+                          providerId: selectedProviderId,
+                          provider: {
+                            id: selectedProviderId,
+                            name: selectedProvider?.name || editingOrder.provider.name
+                          }
+                        });
+                      }}
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        border: '1px solid #555',
+                        borderRadius: '5px',
+                        fontSize: '1rem',
+                        backgroundColor: 'black',
+                        color: 'white'
+                      }}
+                    >
+                      {providers?.map((provider) => (
+                        <option key={provider.id} value={provider.id}>
+                          {provider.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
+  
+                <div style={{ flex: 1, minWidth: '300px' }}>
+                  <h6 style={{
+                    fontWeight: '600',
+                    color: 'hsla(220, 30%, 70%, 1)',
+                    marginBottom: '1rem',
+                    fontSize: '1.1rem'
+                  }}>Order Details</h6>
+  
+                  {editingOrder.orderDetails.map((detail, index) => (
+                    <div key={detail.id} style={{
+                      border: '1px solid hsla(220, 30%, 40%, 0.3)',
+                      padding: '1rem',
+                      borderRadius: '8px',
+                      marginBottom: '1.5rem',
+                      background: 'hsla(220, 30%, 15%, 0.5)'
+                    }}>
+                      <div style={{ marginBottom: '1rem' }}>
+                        <label style={{
+                          display: 'block',
+                          marginBottom: '0.5rem',
+                          color: 'white'
+                        }}>Product</label>
+                        <select
+                          value={detail.productId}
+                          onChange={(e) => {
+                            const updatedDetails = [...editingOrder.orderDetails];
+                            const selectedProductId = parseInt(e.target.value);
+                            const selectedProduct = products?.find(p => p.id === selectedProductId);
+  
+                            updatedDetails[index] = {
+                              ...updatedDetails[index],
+                              productId: selectedProductId,
+                              product: selectedProduct ? {
+                                id: selectedProduct.id,
+                                name: selectedProduct.name
+                              } : undefined,
+                              price: selectedProduct?.unitPrice || updatedDetails[index].price
+                            };
+  
+                            setEditingOrder({
+                              ...editingOrder,
+                              orderDetails: updatedDetails
+                            });
+                          }}
+                          style={{
+                            width: '100%',
+                            padding: '12px',
+                            border: '1px solid #555',
+                            borderRadius: '5px',
+                            fontSize: '1rem',
+                            backgroundColor: 'black',
+                            color: 'white'
+                          }}
+                        >
+                          <option value="">Select a product</option>
+                          {products?.map((product) => (
+                            <option key={product.id} value={product.id}>
+                              {product.name} (HUF {product.unitPrice.toFixed(2)})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+  
+                      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+                        <div style={{ flex: 1, minWidth: '120px' }}>
+                          <label style={{
+                            display: 'block',
+                            marginBottom: '0.5rem',
+                            color: 'white'
+                          }}>Quantity</label>
+                          <input
+                            type="number"
+                            min="1"
+                            value={detail.OrderQuantity}
+                            onChange={(e) => {
+                              const updatedDetails = [...editingOrder.orderDetails];
+                              updatedDetails[index].OrderQuantity = parseInt(e.target.value) || 0;
+                              setEditingOrder({
+                                ...editingOrder,
+                                orderDetails: updatedDetails
+                              });
+                            }}
+                            style={{
+                              width: '100%',
+                              padding: '12px',
+                              border: '1px solid #555',
+                              borderRadius: '5px',
+                              fontSize: '1rem',
+                              backgroundColor: 'black',
+                              color: 'white'
+                            }}
+                          />
+                        </div>
+  
+                        <div style={{ flex: 1, minWidth: '120px' }}>
+                          <label style={{
+                            display: 'block',
+                            marginBottom: '0.5rem',
+                            color: 'white'
+                          }}>Unit Price (HUF)</label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={detail.price}
+                            onChange={(e) => {
+                              const updatedDetails = [...editingOrder.orderDetails];
+                              updatedDetails[index].price = parseFloat(e.target.value) || 0;
+                              setEditingOrder({
+                                ...editingOrder,
+                                orderDetails: updatedDetails
+                              });
+                            }}
+                            style={{
+                              width: '100%',
+                              padding: '12px',
+                              border: '1px solid #555',
+                              borderRadius: '5px',
+                              fontSize: '1rem',
+                              backgroundColor: 'black',
+                              color: 'white'
+                            }}
+                          />
+                        </div>
+                      </div>
+  
+                      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
+                        <div style={{ flex: 1, minWidth: '120px' }}>
+                          <label style={{
+                            display: 'block',
+                            marginBottom: '0.5rem',
+                            color: 'white'
+                          }}>Shipping Cost (HUF)</label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={detail.shippingCost}
+                            onChange={(e) => {
+                              const updatedDetails = [...editingOrder.orderDetails];
+                              updatedDetails[index].shippingCost = parseFloat(e.target.value) || 0;
+                              setEditingOrder({
+                                ...editingOrder,
+                                orderDetails: updatedDetails
+                              });
+                            }}
+                            style={{
+                              width: '100%',
+                              padding: '12px',
+                              border: '1px solid #555',
+                              borderRadius: '5px',
+                              fontSize: '1rem',
+                              backgroundColor: 'black',
+                              color: 'white'
+                            }}
+                          />
+                        </div>
+  
+                        <div style={{ flex: 1, minWidth: '120px' }}>
+                          <label style={{
+                            display: 'block',
+                            marginBottom: '0.5rem',
+                            color: 'white'
+                          }}>Expected Date</label>
+                          <input
+                            type="date"
+                            value={detail.ExpectedDate.split('T')[0]}
+                            onChange={(e) => {
+                              const updatedDetails = [...editingOrder.orderDetails];
+                              updatedDetails[index].ExpectedDate = new Date(e.target.value).toISOString();
+                              setEditingOrder({
+                                ...editingOrder,
+                                orderDetails: updatedDetails
+                              });
+                            }}
+                            style={{
+                              width: '100%',
+                              padding: '12px',
+                              border: '1px solid #555',
+                              borderRadius: '5px',
+                              fontSize: '1rem',
+                              backgroundColor: 'black',
+                              color: 'white'
+                            }}
+                          />
+                        </div>
+                      </div>
+  
+                      <div style={{ marginBottom: '1rem' }}>
+                        <label style={{
+                          display: 'block',
+                          marginBottom: '0.5rem',
+                          color: 'white'
+                        }}>Warehouse</label>
+                        <select
+                          value={detail.warehouseId}
+                          onChange={(e) => {
+                            const updatedDetails = [...editingOrder.orderDetails];
+                            const selectedWarehouseId = parseInt(e.target.value);
+                            const selectedWarehouse = warehouses?.find(w => w.id === selectedWarehouseId);
+  
+                            updatedDetails[index] = {
+                              ...updatedDetails[index],
+                              warehouseId: selectedWarehouseId,
+                              warehouse: selectedWarehouse ? {
+                                id: selectedWarehouse.id,
+                                name: selectedWarehouse.name
+                              } : undefined
+                            };
+  
+                            setEditingOrder({
+                              ...editingOrder,
+                              orderDetails: updatedDetails
+                            });
+                          }}
+                          style={{
+                            width: '100%',
+                            padding: '12px',
+                            border: '1px solid #555',
+                            borderRadius: '5px',
+                            fontSize: '1rem',
+                            backgroundColor: 'black',
+                            color: 'white'
+                          }}
+                        >
+                          <option value="">Select a warehouse</option>
+                          {warehouses?.map((warehouse) => (
+                            <option key={warehouse.id} value={warehouse.id}>
+                              {warehouse.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+  
+                      <div style={{ marginBottom: '1rem' }}>
+                        <label style={{
+                          display: 'block',
+                          marginBottom: '0.5rem',
+                          color: 'white'
+                        }}>Shipping Address</label>
+                        <select
+                          value={detail.addressId}
+                          onChange={(e) => {
+                            const updatedDetails = [...editingOrder.orderDetails];
+                            const selectedAddressId = parseInt(e.target.value);
+                            const selectedAddress = addresses?.find(a => a.id === selectedAddressId);
+  
+                            updatedDetails[index] = {
+                              ...updatedDetails[index],
+                              addressId: selectedAddressId,
+                              address: selectedAddress ? {
+                                id: selectedAddress.id,
+                                street: selectedAddress.street,
+                                city: selectedAddress.city,
+                                postalCode: selectedAddress.postalCode
+                              } : undefined
+                            };
+  
+                            setEditingOrder({
+                              ...editingOrder,
+                              orderDetails: updatedDetails
+                            });
+                          }}
+                          style={{
+                            width: '100%',
+                            padding: '12px',
+                            border: '1px solid #555',
+                            borderRadius: '5px',
+                            fontSize: '1rem',
+                            backgroundColor: 'black',
+                            color: 'white'
+                          }}
+                        >
+                          <option value="">Select an address</option>
+                          {addresses?.map((address) => (
+                            <option key={address.id} value={address.id}>
+                              {address.street}, {address.city}, {address.postalCode}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="modal-footer">
-                <button
-                  onClick={() => setEditingOrder(null)}
-                  className="btn btn-outline-secondary"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => handleUpdateOrder(editingOrder.id, editingOrder)}
-                  className="btn btn-primary"
-                >
-                  Save Changes
-                </button>
-              </div>
+            </div>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '1rem',
+              marginTop: '1.5rem',
+              paddingTop: '1.5rem',
+              borderTop: '1px solid hsla(220, 30%, 40%, 0.3)'
+            }}>
+              <button
+                onClick={() => setEditingOrder(null)}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: 'white',
+                  padding: '0.75rem 1.5rem',
+                  border: '1px solid hsla(220, 30%, 40%, 1)',
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'hsla(220, 30%, 20%, 0.5)'}
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleUpdateOrder(editingOrder.id, editingOrder)}
+                style={{
+                  backgroundColor: 'hsla(220, 70%, 8%, 1)',
+                  color: 'white',
+                  padding: '0.75rem 1.5rem',
+                  border: '1px solid hsla(220, 70%, 20%, 1)',
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
+                onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
+              >
+                Save Changes
+              </button>
             </div>
           </div>
         </div>

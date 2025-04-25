@@ -63,123 +63,259 @@
     if (!isOpen) return null;
 
     return (
-      <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-    <div className="modal-dialog modal-dialog-centered">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h5 className="modal-title">Add New Provider</h5>
-          <button 
-            type="button" 
-            className="btn-close" 
-            onClick={onClose}
-            disabled={isSubmitting}
-          ></button>
-        </div>
-
-        <div className="modal-body">
-          {apiError && (
-            <div className="alert alert-danger mb-3">
-              {apiError}
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit(submitProvider)}>
-            <div className="mb-3">
-              <label htmlFor="name" className="form-label">
-                Provider Name *
-              </label>
-              <input
-                id="name"
-                type="text"
-                {...register('name', { 
-                  required: 'Provider name is required',
-                  validate: (value) => !!value.trim() || 'Name cannot be empty'
-                })}
-                className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                onBlur={() => trigger('name')}
-                disabled={isSubmitting}
-              />
-              {errors.name && (
-                <div className="invalid-feedback">
-                  {errors.name.message}
-                </div>
-              )}
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email *
-              </label>
-              <input
-                id="email"
-                type="email"
-                {...register('email', { 
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'Enter a valid email address'
-                  }
-                })}
-                className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                onBlur={() => trigger('email')}
-                disabled={isSubmitting}
-              />
-              {errors.email && (
-                <div className="invalid-feedback">
-                  {errors.email.message}
-                </div>
-              )}
-            </div>
-
-            <div className="mb-3">
-              <label htmlFor="phone" className="form-label">
-                Phone Number *
-              </label>
-              <input
-                id="phone"
-                type="tel"
-                {...register('phone', { 
-                  required: 'Phone number is required',
-                  validate: validatePhone
-                })}
-                className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
-                placeholder="+1234567890"
-                onBlur={() => trigger('phone')}
-                disabled={isSubmitting}
-              />
-              {errors.phone && (
-                <div className="invalid-feedback">
-                  {errors.phone.message}
-                </div>
-              )}
-            </div>
-
-            <div className="modal-footer">
-              <button
-                type="button"
-                onClick={onClose}
-                className="btn btn-secondary"
-                disabled={isSubmitting}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="btn btn-primary d-flex align-items-center"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    Saving...
-                  </>
-                ) : 'Save Provider'}
-              </button>
-            </div>
-          </form>
+      <div className="modal-container" style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(0,0,0,0.7)',
+        zIndex: 1050,
+        backdropFilter: 'blur(5px)'
+      }}>
+        <div className="formWrapper" style={{
+          margin: '20px 0',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '2rem',
+          borderRadius: '12px',
+          background: 'hsla(220, 30%, 10%, 0.9)',
+          width: '90%',
+          maxWidth: '450px',
+          boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.6), 0px 15px 35px rgba(0, 0, 0, 0.3)',
+          backdropFilter: 'blur(10px)',
+          border: '1px solid hsla(220, 30%, 40%, 0.3)',
+          color: 'white'
+        }}>
+          <div className="modal-header" style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '1.5rem',
+            borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)',
+            paddingBottom: '1rem'
+          }}>
+            <h2 style={{
+              fontSize: 'clamp(2rem, 10vw, 2.15rem)',
+              fontWeight: 'bold',
+              color: 'white',
+              margin: 0
+            }}>Add New Provider</h2>
+            <button 
+              type="button" 
+              className="btn-close" 
+              onClick={onClose}
+              disabled={isSubmitting}
+              style={{
+                filter: 'invert(1)',
+                opacity: isSubmitting ? '0.5' : '1',
+                cursor: isSubmitting ? 'not-allowed' : 'pointer'
+              }}
+            ></button>
+          </div>
+    
+          <div className="modal-body">
+            {apiError && (
+              <div className="alert alert-danger mb-3" style={{
+                backgroundColor: 'hsla(0, 100%, 30%, 0.2)',
+                border: '1px solid #FF5252',
+                color: '#FF5252',
+                padding: '0.75rem 1.25rem',
+                borderRadius: '0.25rem',
+                marginBottom: '1rem'
+              }}>
+                {apiError}
+              </div>
+            )}
+    
+            <form onSubmit={handleSubmit(submitProvider)}>
+              <div className="mb-3" style={{ marginBottom: '1rem' }}>
+                <label htmlFor="name" className="form-label" style={{
+                  display: 'block',
+                  marginBottom: '0.5rem',
+                  color: 'white'
+                }}>
+                  Provider Name *
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  {...register('name', { 
+                    required: 'Provider name is required',
+                    validate: (value) => !!value.trim() || 'Name cannot be empty'
+                  })}
+                  className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                  onBlur={() => trigger('name')}
+                  disabled={isSubmitting}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '1px solid #555',
+                    borderRadius: '5px',
+                    fontSize: '1rem',
+                    backgroundColor: 'black',
+                    color: 'white',
+                    transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease',
+                    borderColor: errors.name ? '#FF5252' : '#555'
+                  }}
+                />
+                {errors.name && (
+                  <div className="invalid-feedback" style={{
+                    width: '100%',
+                    marginTop: '0.25rem',
+                    fontSize: '0.875em',
+                    color: '#FF5252'
+                  }}>
+                    {errors.name.message}
+                  </div>
+                )}
+              </div>
+    
+              <div className="mb-3" style={{ marginBottom: '1rem' }}>
+                <label htmlFor="email" className="form-label" style={{
+                  display: 'block',
+                  marginBottom: '0.5rem',
+                  color: 'white'
+                }}>
+                  Email *
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  {...register('email', { 
+                    required: 'Email is required',
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: 'Enter a valid email address'
+                    }
+                  })}
+                  className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                  onBlur={() => trigger('email')}
+                  disabled={isSubmitting}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '1px solid #555',
+                    borderRadius: '5px',
+                    fontSize: '1rem',
+                    backgroundColor: 'black',
+                    color: 'white',
+                    transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease',
+                    borderColor: errors.email ? '#FF5252' : '#555'
+                  }}
+                />
+                {errors.email && (
+                  <div className="invalid-feedback" style={{
+                    width: '100%',
+                    marginTop: '0.25rem',
+                    fontSize: '0.875em',
+                    color: '#FF5252'
+                  }}>
+                    {errors.email.message}
+                  </div>
+                )}
+              </div>
+    
+              <div className="mb-3" style={{ marginBottom: '1rem' }}>
+                <label htmlFor="phone" className="form-label" style={{
+                  display: 'block',
+                  marginBottom: '0.5rem',
+                  color: 'white'
+                }}>
+                  Phone Number *
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  {...register('phone', { 
+                    required: 'Phone number is required',
+                    validate: validatePhone
+                  })}
+                  className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
+                  placeholder="+1234567890"
+                  onBlur={() => trigger('phone')}
+                  disabled={isSubmitting}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    border: '1px solid #555',
+                    borderRadius: '5px',
+                    fontSize: '1rem',
+                    backgroundColor: 'black',
+                    color: 'white',
+                    transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease',
+                    borderColor: errors.phone ? '#FF5252' : '#555'
+                  }}
+                />
+                {errors.phone && (
+                  <div className="invalid-feedback" style={{
+                    width: '100%',
+                    marginTop: '0.25rem',
+                    fontSize: '0.875em',
+                    color: '#FF5252'
+                  }}>
+                    {errors.phone.message}
+                  </div>
+                )}
+              </div>
+    
+              <div className="modal-footer" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginTop: '1.5rem'
+              }}>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="btn btn-secondary"
+                  disabled={isSubmitting}
+                  style={{
+                    backgroundColor: 'hsla(220, 70%, 8%, 1)',
+                    color: 'white',
+                    padding: '12px',
+                    fontSize: '1rem',
+                    border: '1px solid hsla(220, 70%, 20%, 1)',
+                    borderRadius: '20px',
+                    cursor: 'pointer',
+                    width: '45%',
+                    opacity: isSubmitting ? '0.5' : '1',
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary d-flex align-items-center"
+                  disabled={isSubmitting}
+                  style={{
+                    backgroundColor: 'hsla(220, 70%, 8%, 1)',
+                    color: 'white',
+                    padding: '12px',
+                    fontSize: '1.1rem',
+                    border: '1px solid hsla(220, 70%, 20%, 1)',
+                    borderRadius: '20px',
+                    cursor: 'pointer',
+                    width: '45%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    opacity: isSubmitting ? '0.5' : '1',
+                  }}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Saving...
+                    </>
+                  ) : 'Save Provider'}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
     );
   };

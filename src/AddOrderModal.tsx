@@ -336,41 +336,90 @@ const AddOrderForm: React.FC = () => {
   };
 
   return (
-    <div className="container p-4">
-      <h2 className="mb-4">Create New Order</h2>
+    <div style={{
+      marginTop: '50px',
+      padding: '2rem',
+      background: 'radial-gradient(at 50% 50%, hsla(220, 30%, 15%, 1), hsla(220, 30%, 5%, 1))',
+      minHeight: '100vh',
+      color: 'white'
+    }}>
+      <h2 style={{
+        fontSize: '1.75rem',
+        fontWeight: 'bold',
+        marginBottom: '2rem',
+        color: 'white',
+        borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)',
+        paddingBottom: '0.5rem'
+      }}>Create New Order</h2>
       
       {error && (
-        <div className="alert alert-danger mb-4" role="alert">
+        <div style={{
+          backgroundColor: 'hsla(0, 100%, 30%, 0.2)',
+          border: '1px solid #FF5252',
+          color: '#FF5252',
+          padding: '1rem',
+          borderRadius: '0.5rem',
+          marginBottom: '1.5rem'
+        }}>
           {error}
         </div>
       )}
       {success && (
-        <div className="alert alert-success mb-4" role="alert">
+        <div style={{
+          backgroundColor: 'hsla(120, 100%, 25%, 0.2)',
+          border: '1px solid #4CAF50',
+          color: '#4CAF50',
+          padding: '1rem',
+          borderRadius: '0.5rem',
+          marginBottom: '1.5rem'
+        }}>
           {success}
         </div>
       )}
       
-      <form onSubmit={handleSubmit}>
-        <div className="row mb-4">
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label htmlFor="orderDate" className="form-label">Order Date</label>
+      <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: '300px' }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{
+                display: 'block',
+                marginBottom: '0.5rem',
+                color: 'white'
+              }}>Order Date</label>
               <input
                 type="date"
-                className="form-control"
-                id="orderDate"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #555',
+                  borderRadius: '5px',
+                  fontSize: '1rem',
+                  backgroundColor: 'black',
+                  color: 'white'
+                }}
                 value={orderDate}
                 onChange={(e) => setOrderDate(e.target.value)}
                 required
               />
             </div>
           </div>
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label htmlFor="provider" className="form-label">Provider</label>
+          <div style={{ flex: 1, minWidth: '300px' }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{
+                display: 'block',
+                marginBottom: '0.5rem',
+                color: 'white'
+              }}>Provider</label>
               <select
-                className="form-select"
-                id="provider"
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #555',
+                  borderRadius: '5px',
+                  fontSize: '1rem',
+                  backgroundColor: 'black',
+                  color: 'white'
+                }}
                 value={providerId}
                 onChange={(e) => setProviderId(Number(e.target.value))}
                 disabled={isLoading || providers.length === 0}
@@ -386,191 +435,327 @@ const AddOrderForm: React.FC = () => {
           </div>
         </div>
   
-        <div className="row mb-4">
-          <div className="col">
-            <div className="mb-3">
-              <label htmlFor="productUpload" className="form-label">Upload Products from Excel</label>
-              <input
-                type="file"
-                className="form-control"
-                id="productUpload"
-                accept=".xlsx,.xls"
-                onChange={handleFileUpload}
-                disabled={isLoading}
-              />
-              <div className="form-text">
-                Upload an Excel file with product barcodes
-              </div>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{
+              display: 'block',
+              marginBottom: '0.5rem',
+              color: 'white'
+            }}>Upload Products from Excel</label>
+            <input
+              type="file"
+              style={{
+                width: '100%',
+                padding: '0.5rem',
+                border: '1px solid #555',
+                borderRadius: '5px',
+                fontSize: '1rem',
+                backgroundColor: 'black',
+                color: 'white'
+              }}
+              accept=".xlsx,.xls"
+              onChange={handleFileUpload}
+              disabled={isLoading}
+            />
+            <div style={{
+              fontSize: '0.875rem',
+              color: 'hsla(220, 30%, 70%, 1)',
+              marginTop: '0.25rem'
+            }}>
+              Upload an Excel file with product barcodes
             </div>
           </div>
         </div>
   
         {products.length > 0 && (
-          <div className="row mb-4">
-            <div className="col">
-              <h5>Available Products</h5>
-              <div className="table-responsive">
-                <table className="table table-striped table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Barcode</th>
-                      <th>Price</th>
-                      <th>Action</th>
+          <div style={{ marginBottom: '2rem' }}>
+            <h5 style={{
+              fontSize: '1.25rem',
+              marginBottom: '1rem',
+              color: 'hsla(220, 70%, 60%, 1)'
+            }}>Available Products</h5>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{
+                width: '100%',
+                borderCollapse: 'collapse',
+                color: 'white',
+                marginBottom: '1.5rem'
+              }}>
+                <thead>
+                  <tr style={{
+                    backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
+                    borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
+                  }}>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Name</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Barcode</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Price</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map(product => (
+                    <tr key={product.id} style={{
+                      borderBottom: '1px solid hsla(220, 30%, 40%, 0.1)'
+                    }}>
+                      <td style={{ padding: '0.75rem' }}>{product.name}</td>
+                      <td style={{ padding: '0.75rem' }}>{product.barcode}</td>
+                      <td style={{ padding: '0.75rem' }}>{product.unitPrice} Ft</td>
+                      <td style={{ padding: '0.75rem' }}>
+                        <button
+                          style={{
+                            backgroundColor: selectedProducts.some(p => p.productId === product.id) ? 
+                              'hsla(220, 30%, 30%, 1)' : 'hsla(220, 70%, 8%, 1)',
+                            color: 'white',
+                            padding: '0.375rem 0.75rem',
+                            border: 'none',
+                            borderRadius: '20px',
+                            cursor: selectedProducts.some(p => p.productId === product.id) ? 'default' : 'pointer',
+                            fontSize: '0.875rem',
+                            opacity: selectedProducts.some(p => p.productId === product.id) ? 0.5 : 1
+                          }}
+                          onClick={() => addProductToOrder(product)}
+                          disabled={selectedProducts.some(p => p.productId === product.id)}
+                        >
+                          Add to Order
+                        </button>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {products.map(product => (
-                      <tr key={product.id}>
-                        <td>{product.name}</td>
-                        <td>{product.barcode}</td>
-                        <td>{product.unitPrice} Ft</td>
-                        <td>
-                          <button
-                            className="btn btn-primary btn-sm"
-                            onClick={() => addProductToOrder(product)}
-                            disabled={selectedProducts.some(p => p.productId === product.id)}
-                          >
-                            Add to Order
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
   
         {selectedProducts.length > 0 && (
-          <div className="row mb-4">
-            <div className="col">
-              <h5>Order Items</h5>
-              <div className="table-responsive">
-                <table className="table table-striped table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Product</th>
-                      <th>Price (Ft)</th>
-                      <th>Shipping (Ft)</th>
-                      <th>Quantity</th>
-                      <th>Expected Date</th>
-                      <th>Address</th>
-                      <th>Warehouse</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {selectedProducts.map((item, index) => {
-                      const product = products.find(p => p.id === item.productId);
-                      return (
-                        <tr key={index}>
-                          <td>{product?.name || 'Product'}</td>
-                          <td>
-                            <input
-                              type="number"
-                              className="form-control"
-                              min="0"
-                              step="0.01"
-                              value={item.price}
-                              onChange={(e) => updateProduct(index, 'price', Number(e.target.value))}
-                              required
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="number"
-                              className="form-control"
-                              min="0"
-                              step="0.01"
-                              value={item.shippingCost}
-                              onChange={(e) => updateProduct(index, 'shippingCost', Number(e.target.value))}
-                              required
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="number"
-                              className="form-control"
-                              min="1"
-                              value={item.OrderQuantity}
-                              onChange={(e) => updateProduct(index, 'OrderQuantity', Number(e.target.value))}
-                              required
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="date"
-                              className="form-control"
-                              value={item.ExpectedDate}
-                              onChange={(e) => updateProduct(index, 'ExpectedDate', e.target.value)}
-                              required
-                            />
-                          </td>
-                          <td>
-                            <select
-                              className="form-select"
-                              value={item.addressId}
-                              onChange={(e) => updateProduct(index, 'addressId', Number(e.target.value))}
-                              required
-                            >
-                              {addresses.map(address => (
-                                <option key={address.id} value={address.id}>
-                                  {address.street}, {address.city}
-                                </option>
-                              ))}
-                            </select>
-                          </td>
-                          <td>
-                            <select
-                              className="form-select"
-                              value={item.warehouseId}
-                              onChange={(e) => updateProduct(index, 'warehouseId', Number(e.target.value))}
-                              required
-                            >
-                              {warehouses.map(warehouse => (
-                                <option key={warehouse.id} value={warehouse.id}>
-                                  {warehouse.name}
-                                </option>
-                              ))}
-                            </select>
-                          </td>
-                          <td>
-                            <button
-                              className="btn btn-danger btn-sm"
-                              onClick={() => removeProduct(index)}
-                            >
-                              Remove
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+          <div style={{ marginBottom: '2rem' }}>
+            <h5 style={{
+              fontSize: '1.25rem',
+              marginBottom: '1rem',
+              color: 'hsla(220, 70%, 60%, 1)'
+            }}>Order Items</h5>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{
+                width: '100%',
+                borderCollapse: 'collapse',
+                color: 'white',
+                marginBottom: '1.5rem'
+              }}>
+                <thead>
+                  <tr style={{
+                    backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
+                    borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
+                  }}>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Product</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Price (Ft)</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping (Ft)</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Quantity</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Expected Date</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Address</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Warehouse</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedProducts.map((item, index) => {
+                    const product = products.find(p => p.id === item.productId);
+                    return (
+                      <tr key={index} style={{
+                        borderBottom: '1px solid hsla(220, 30%, 40%, 0.1)'
+                      }}>
+                        <td style={{ padding: '0.75rem' }}>{product?.name || 'Product'}</td>
+                        <td style={{ padding: '0.75rem' }}>
+                          <input
+                            type="number"
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              border: '1px solid #555',
+                              borderRadius: '5px',
+                              fontSize: '1rem',
+                              backgroundColor: 'black',
+                              color: 'white'
+                            }}
+                            min="0"
+                            step="0.01"
+                            value={item.price}
+                            onChange={(e) => updateProduct(index, 'price', Number(e.target.value))}
+                            required
+                          />
+                        </td>
+                        <td style={{ padding: '0.75rem' }}>
+                          <input
+                            type="number"
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              border: '1px solid #555',
+                              borderRadius: '5px',
+                              fontSize: '1rem',
+                              backgroundColor: 'black',
+                              color: 'white'
+                            }}
+                            min="0"
+                            step="0.01"
+                            value={item.shippingCost}
+                            onChange={(e) => updateProduct(index, 'shippingCost', Number(e.target.value))}
+                            required
+                          />
+                        </td>
+                        <td style={{ padding: '0.75rem' }}>
+                          <input
+                            type="number"
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              border: '1px solid #555',
+                              borderRadius: '5px',
+                              fontSize: '1rem',
+                              backgroundColor: 'black',
+                              color: 'white'
+                            }}
+                            min="1"
+                            value={item.OrderQuantity}
+                            onChange={(e) => updateProduct(index, 'OrderQuantity', Number(e.target.value))}
+                            required
+                          />
+                        </td>
+                        <td style={{ padding: '0.75rem' }}>
+                          <input
+                            type="date"
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              border: '1px solid #555',
+                              borderRadius: '5px',
+                              fontSize: '1rem',
+                              backgroundColor: 'black',
+                              color: 'white'
+                            }}
+                            value={item.ExpectedDate}
+                            onChange={(e) => updateProduct(index, 'ExpectedDate', e.target.value)}
+                            required
+                          />
+                        </td>
+                        <td style={{ padding: '0.75rem' }}>
+                          <select
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              border: '1px solid #555',
+                              borderRadius: '5px',
+                              fontSize: '1rem',
+                              backgroundColor: 'black',
+                              color: 'white'
+                            }}
+                            value={item.addressId}
+                            onChange={(e) => updateProduct(index, 'addressId', Number(e.target.value))}
+                            required
+                          >
+                            {addresses.map(address => (
+                              <option key={address.id} value={address.id}>
+                                {address.street}, {address.city}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td style={{ padding: '0.75rem' }}>
+                          <select
+                            style={{
+                              width: '100%',
+                              padding: '0.5rem',
+                              border: '1px solid #555',
+                              borderRadius: '5px',
+                              fontSize: '1rem',
+                              backgroundColor: 'black',
+                              color: 'white'
+                            }}
+                            value={item.warehouseId}
+                            onChange={(e) => updateProduct(index, 'warehouseId', Number(e.target.value))}
+                            required
+                          >
+                            {warehouses.map(warehouse => (
+                              <option key={warehouse.id} value={warehouse.id}>
+                                {warehouse.name}
+                              </option>
+                            ))}
+                          </select>
+                        </td>
+                        <td style={{ padding: '0.75rem' }}>
+                          <button
+                            style={{
+                              backgroundColor: 'hsla(0, 70%, 40%, 1)',
+                              color: 'white',
+                              padding: '0.375rem 0.75rem',
+                              border: 'none',
+                              borderRadius: '20px',
+                              cursor: 'pointer',
+                              fontSize: '0.875rem'
+                            }}
+                            onClick={() => removeProduct(index)}
+                          >
+                            Remove
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
   
-        <div className="d-flex justify-content-between mt-4">
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginTop: '2rem',
+          flexWrap: 'wrap',
+          gap: '1rem'
+        }}>
           <button 
-            className="btn btn-secondary"
+            style={{
+              backgroundColor: 'hsla(220, 30%, 20%, 1)',
+              color: 'white',
+              padding: '0.75rem 1.5rem',
+              border: '1px solid hsla(220, 30%, 40%, 1)',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              opacity: isLoading ? 0.5 : 1,
+            }}
             onClick={resetForm}
             disabled={isLoading}
           >
             Reset Form
           </button>
           <button
-            className="btn btn-primary"
+            style={{
+              backgroundColor: 'hsla(220, 70%, 8%, 1)',
+              color: 'white',
+              padding: '0.75rem 1.5rem',
+              border: '1px solid hsla(220, 70%, 20%, 1)',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              opacity: isLoading || selectedProducts.length === 0 ? 0.5 : 1,
+            }}
             type="submit"
             disabled={isLoading || selectedProducts.length === 0}
           >
             {isLoading ? (
               <>
-                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                <span className="ms-2">Creating Order...</span>
+                <span style={{
+                  display: 'inline-block',
+                  width: '1rem',
+                  height: '1rem',
+                  border: '2px solid rgba(255,255,255,0.3)',
+                  borderRadius: '50%',
+                  borderTopColor: 'white',
+                  animation: 'spin 1s linear infinite',
+                  marginRight: '0.5rem'
+                }}></span>
+                Creating Order...
               </>
             ) : (
               'Create Order'
@@ -579,7 +764,8 @@ const AddOrderForm: React.FC = () => {
         </div>
       </form>
     </div>
-)};
+  );
+};
 
 
 export default AddOrderForm;
