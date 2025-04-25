@@ -28,7 +28,7 @@ const NavigationBar = () => {
     closeMenu();
   }, [location]);
   return (<>
-    <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
+    <nav className="navbar navbar-expand-xxl navbar-dark fixed-top">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
           Saxon Kitchenware
