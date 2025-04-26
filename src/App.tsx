@@ -5,6 +5,7 @@ import Registration from "./Registration/registration";
 import OrdersComponent from './AllIncomingOrders';
 import AddOrderForm from './AddOrderModal';
 import OutgoingOrdersComponent from './AllOutgoingOrders';
+import ProfilePage from './ProfilePage';
 
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
             <Route path="*" element={<Home />} /> {/* Fallback route */}
             <Route path="/addOrder" element={<AddOrderForm />} /> {/* Fallback route */}
             <Route path="/OutGoing" element={<OutgoingOrdersComponent/>} />
+            <Route path="/Profile" element={<ProfilePage />} /> {/* Fallback route */}
          </Routes>
       </>
   );

@@ -20,7 +20,6 @@ const LoginForm: React.FC = () => {
 
     try {
       await api.post("/auth/login", JSON.stringify({ email, password }));
-
       setIsLoggedIn(true);
       setSuccess("Sikeres bejelentkezés!");
     } catch (err) {
