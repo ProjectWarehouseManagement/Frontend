@@ -350,7 +350,7 @@ const AddOrderForm: React.FC = () => {
         color: 'white',
         borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)',
         paddingBottom: '0.5rem'
-      }}>Create New Order</h2>
+      }}>Megrendelés Hozzáadása</h2>
       
       {error && (
         <div style={{
@@ -385,7 +385,7 @@ const AddOrderForm: React.FC = () => {
                 display: 'block',
                 marginBottom: '0.5rem',
                 color: 'white'
-              }}>Order Date</label>
+              }}>Rendelés dátuma</label>
               <input
                 type="date"
                 style={{
@@ -409,7 +409,7 @@ const AddOrderForm: React.FC = () => {
                 display: 'block',
                 marginBottom: '0.5rem',
                 color: 'white'
-              }}>Provider</label>
+              }}>Beszállitó</label>
               <select
                 style={{
                   width: '100%',
@@ -441,7 +441,7 @@ const AddOrderForm: React.FC = () => {
               display: 'block',
               marginBottom: '0.5rem',
               color: 'white'
-            }}>Upload Products from Excel</label>
+            }}>Termékek feltöltése Excelből</label>
             <input
               type="file"
               style={{
@@ -462,7 +462,7 @@ const AddOrderForm: React.FC = () => {
               color: 'hsla(220, 30%, 70%, 1)',
               marginTop: '0.25rem'
             }}>
-              Upload an Excel file with product barcodes
+              Tölts fel egy Excel fájlt a termék vonalkódjaival.
             </div>
           </div>
         </div>
@@ -473,7 +473,7 @@ const AddOrderForm: React.FC = () => {
               fontSize: '1.25rem',
               marginBottom: '1rem',
               color: 'hsla(220, 70%, 60%, 1)'
-            }}>Available Products</h5>
+            }}>Elérhető termékek</h5>
             <div style={{ overflowX: 'auto' }}>
               <table style={{
                 width: '100%',
@@ -516,7 +516,7 @@ const AddOrderForm: React.FC = () => {
                           onClick={() => addProductToOrder(product)}
                           disabled={selectedProducts.some(p => p.productId === product.id)}
                         >
-                          Add to Order
+                          Hozzáadás a rendeléshez
                         </button>
                       </td>
                     </tr>
@@ -533,7 +533,7 @@ const AddOrderForm: React.FC = () => {
               fontSize: '1.25rem',
               marginBottom: '1rem',
               color: 'hsla(220, 70%, 60%, 1)'
-            }}>Order Items</h5>
+            }}>Rendelés tételei</h5>
             <div style={{ overflowX: 'auto' }}>
               <table style={{
                 width: '100%',
@@ -694,7 +694,7 @@ const AddOrderForm: React.FC = () => {
                             }}
                             onClick={() => removeProduct(index)}
                           >
-                            Remove
+                            Eltávolítás
                           </button>
                         </td>
                       </tr>
@@ -727,7 +727,7 @@ const AddOrderForm: React.FC = () => {
             onClick={resetForm}
             disabled={isLoading}
           >
-            Reset Form
+            Visszaállítás
           </button>
           <button
             style={{
@@ -755,10 +755,10 @@ const AddOrderForm: React.FC = () => {
                   animation: 'spin 1s linear infinite',
                   marginRight: '0.5rem'
                 }}></span>
-                Creating Order...
+                Rendelés létrehozása...
               </>
             ) : (
-              'Create Order'
+              'Rendelés létrehozása'
             )}
           </button>
         </div>

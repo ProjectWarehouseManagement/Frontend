@@ -103,7 +103,7 @@
               fontWeight: 'bold',
               color: 'white',
               margin: 0
-            }}>Add New Provider</h2>
+            }}>Beszállító Hozzáadása</h2>
             <button 
               type="button" 
               className="btn-close" 
@@ -138,7 +138,7 @@
                   marginBottom: '0.5rem',
                   color: 'white'
                 }}>
-                  Provider Name *
+                  Név
                 </label>
                 <input
                   id="name"
@@ -180,7 +180,7 @@
                   marginBottom: '0.5rem',
                   color: 'white'
                 }}>
-                  Email *
+                  Email
                 </label>
                 <input
                   id="email"
@@ -225,7 +225,7 @@
                   marginBottom: '0.5rem',
                   color: 'white'
                 }}>
-                  Phone Number *
+                  Telefonszám
                 </label>
                 <input
                   id="phone"
@@ -284,7 +284,7 @@
                     opacity: isSubmitting ? '0.5' : '1',
                   }}
                 >
-                  Cancel
+                  Vissza
                 </button>
                 <button
                   type="submit"
@@ -308,9 +308,9 @@
                   {isSubmitting ? (
                     <>
                       <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                      Saving...
+                      Mentés...
                     </>
-                  ) : 'Save Provider'}
+                  ) : 'Mentés'}
                 </button>
               </div>
             </form>

@@ -208,7 +208,7 @@ const OutgoingOrdersComponent = () => {
           onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
           onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
         >
-          Try Again
+          Próbáld Újra
         </button>
       </div>
     );
@@ -231,7 +231,7 @@ const OutgoingOrdersComponent = () => {
           width: '3rem',
           height: '3rem'
         }} role="status">
-          <span className="visually-hidden">Loading...</span>
+          <span className="visually-hidden">Betöltés...</span>
         </div>
       </div>
     );
@@ -259,8 +259,8 @@ const OutgoingOrdersComponent = () => {
           color: 'hsla(220, 70%, 60%, 1)',
           fontSize: '1.75rem',
           marginBottom: '1rem'
-        }}>No Deliveries Found</h2>
-        <p style={{ marginBottom: '1.5rem' }}>There are no outgoing deliveries to display at this time.</p>
+        }}>Nem található megrendelés</h2>
+        <p style={{ marginBottom: '1.5rem' }}>Jelenleg nincsenek kimenő megrendelések.</p>
         <button
           onClick={() => setRefreshKey(prev => prev + 1)}
           style={{
@@ -276,7 +276,7 @@ const OutgoingOrdersComponent = () => {
           onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
           onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
         >
-          Refresh
+          Újratöltés
         </button>
       </div>
     );
@@ -297,7 +297,7 @@ const OutgoingOrdersComponent = () => {
         borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)',
         paddingBottom: '1rem',
         color: 'white',
-      }}>Outgoing Deliveries</h1>
+      }}>Kimenő Rendelések</h1>
   
       <div style={{ marginBottom: '2rem' }}>
         {deliveries.map((delivery) => (
@@ -328,7 +328,7 @@ const OutgoingOrdersComponent = () => {
                   fontWeight: '600',
                   margin: 0,
                   color: 'hsla(220, 70%, 60%, 1)'
-                }}>Delivery #{delivery.id}</h2>
+                }}>Rendelés #{delivery.id}</h2>
                 <button
                   onClick={() => setEditingDelivery(delivery)}
                   style={{
@@ -344,7 +344,7 @@ const OutgoingOrdersComponent = () => {
                   onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 10px hsla(45, 100%, 50%, 0.8)'}
                   onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
                 >
-                  Edit
+                  Módosítás
                 </button>
                 <button
                   onClick={() => handleDeleteDelivery(delivery.id)}
@@ -361,13 +361,13 @@ const OutgoingOrdersComponent = () => {
                   onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 10px hsla(0, 100%, 50%, 0.8)'}
                   onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
                 >
-                  Delete
+                  Törlés
                 </button>
                 <span style={{ color: 'hsla(220, 30%, 70%, 1)' }}>
-                  Date: {new Date(delivery.orderDate).toLocaleDateString()}
+                  Dátum: {new Date(delivery.orderDate).toLocaleDateString()}
                 </span>
                 <span style={{ color: 'hsla(220, 30%, 70%, 1)' }}>
-                  Customer: {delivery.user.name}
+                  Vásárló: {delivery.user.name}
                 </span>
               </div>
             </div>
@@ -384,17 +384,17 @@ const OutgoingOrdersComponent = () => {
                       backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
                       borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
                     }}>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Product</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Quantity</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Unit Price</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Line Total</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Expected Date</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Warehouse</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping to</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Subtotal</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping cost</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Total</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Termék</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Mennyiség</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Ár/Darab</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Összeg</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Szállítás</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Várható érkezés</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Raktár</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Szállítási cím</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Összeg+ÁFA</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Szállítási költség</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Végösszeg</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -424,7 +424,7 @@ const OutgoingOrdersComponent = () => {
                 color: 'hsla(220, 30%, 70%, 1)',
                 padding: '1.5rem 0'
               }}>
-                This delivery has no details
+                A rendeléshez nincs megjeleníthető adat.
               </div>
             )}
           </div>
@@ -498,14 +498,14 @@ const OutgoingOrdersComponent = () => {
                     color: 'hsla(220, 30%, 70%, 1)',
                     marginBottom: '1rem',
                     fontSize: '1.1rem'
-                  }}>Delivery Information</h6>
+                  }}>Szállítási információ</h6>
   
                   <div style={{ marginBottom: '1.5rem' }}>
                     <label style={{
                       display: 'block',
                       marginBottom: '0.5rem',
                       color: 'white'
-                    }}>Delivery Date</label>
+                    }}>Szállítás dátuma</label>
                     <input
                       type="date"
                       value={editingDelivery.orderDate.split('T')[0]}
@@ -530,7 +530,7 @@ const OutgoingOrdersComponent = () => {
                       display: 'block',
                       marginBottom: '0.5rem',
                       color: 'white'
-                    }}>Customer</label>
+                    }}>Vásárló</label>
                     <select
                       value={editingDelivery.userId}
                       onChange={(e) => {
@@ -572,7 +572,7 @@ const OutgoingOrdersComponent = () => {
                     color: 'hsla(220, 30%, 70%, 1)',
                     marginBottom: '1rem',
                     fontSize: '1.1rem'
-                  }}>Delivery Details</h6>
+                  }}>Szállítási adatok</h6>
   
                   {editingDelivery.deliveryDetails.map((detail, index) => (
                     <div key={detail.id} style={{
@@ -587,7 +587,7 @@ const OutgoingOrdersComponent = () => {
                           display: 'block',
                           marginBottom: '0.5rem',
                           color: 'white'
-                        }}>Product</label>
+                        }}>Termék</label>
                         <select
                           value={detail.productId}
                           onChange={(e) => {
@@ -621,7 +621,7 @@ const OutgoingOrdersComponent = () => {
                             color: 'white'
                           }}
                         >
-                          <option value="">Select a product</option>
+                          <option value="">Válassz terméket</option>
                           {products?.map((product) => (
                             <option key={product.id} value={product.id}>
                               {product.name} (HUF {product.unitPrice.toFixed(2)})
@@ -636,7 +636,7 @@ const OutgoingOrdersComponent = () => {
                             display: 'block',
                             marginBottom: '0.5rem',
                             color: 'white'
-                          }}>Quantity</label>
+                          }}>Mennyiség</label>
                           <input
                             type="number"
                             min="1"
@@ -666,7 +666,7 @@ const OutgoingOrdersComponent = () => {
                             display: 'block',
                             marginBottom: '0.5rem',
                             color: 'white'
-                          }}>Unit Price (HUF)</label>
+                          }}>Darabár (HUF)</label>
                           <input
                             type="number"
                             step="0.01"
@@ -699,7 +699,7 @@ const OutgoingOrdersComponent = () => {
                             display: 'block',
                             marginBottom: '0.5rem',
                             color: 'white'
-                          }}>Shipping Cost (HUF)</label>
+                          }}>Szállítási költség (HUF)</label>
                           <input
                             type="number"
                             step="0.01"
@@ -730,7 +730,7 @@ const OutgoingOrdersComponent = () => {
                             display: 'block',
                             marginBottom: '0.5rem',
                             color: 'white'
-                          }}>Expected Date</label>
+                          }}>Várható Szállítás</label>
                           <input
                             type="date"
                             value={detail.ExpectedDate.split('T')[0]}
@@ -760,7 +760,7 @@ const OutgoingOrdersComponent = () => {
                           display: 'block',
                           marginBottom: '0.5rem',
                           color: 'white'
-                        }}>Warehouse</label>
+                        }}>Raktár</label>
                         <select
                           value={detail.warehouseId}
                           onChange={(e) => {
@@ -792,7 +792,7 @@ const OutgoingOrdersComponent = () => {
                             color: 'white'
                           }}
                         >
-                          <option value="">Select a warehouse</option>
+                          <option value="">Válassz Raktárat</option>
                           {warehouses?.map((warehouse) => (
                             <option key={warehouse.id} value={warehouse.id}>
                               {warehouse.name}
@@ -806,7 +806,7 @@ const OutgoingOrdersComponent = () => {
                           display: 'block',
                           marginBottom: '0.5rem',
                           color: 'white'
-                        }}>Shipping Address</label>
+                        }}>Szállítási Cím</label>
                         <select
                           value={detail.addressId}
                           onChange={(e) => {
@@ -840,7 +840,7 @@ const OutgoingOrdersComponent = () => {
                             color: 'white'
                           }}
                         >
-                          <option value="">Select an address</option>
+                          <option value="">Válasszon egy címet</option>
                           {addresses?.map((address) => (
                             <option key={address.id} value={address.id}>
                               {address.street}, {address.city}, {address.postalCode}
@@ -875,7 +875,7 @@ const OutgoingOrdersComponent = () => {
                 onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'hsla(220, 30%, 20%, 0.5)'}
                 onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
-                Cancel
+                Vissza
               </button>
               <button
                 onClick={() => handleUpdateDelivery(editingDelivery.id, editingDelivery)}
@@ -891,7 +891,7 @@ const OutgoingOrdersComponent = () => {
                 onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
                 onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
               >
-                Save Changes
+                Mentés
               </button>
             </div>
           </div>
