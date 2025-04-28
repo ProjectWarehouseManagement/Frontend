@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from './AuthContext';
 import { api } from './environments/api';
+import { AxiosError } from 'axios';
 
 type Role = 'USER' | 'ADMIN';
 
@@ -97,6 +98,7 @@ const ProfilePage = () => {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 phoneNumber: data.phoneNumber,
+                ...(data.newPassword ? { password: data.newPassword } : {}),
             });
 
             setMessage({ text: 'Profile updated successfully', type: 'success' });
@@ -110,7 +112,7 @@ const ProfilePage = () => {
             });
         } catch (error) {
             console.error('Error updating profile:', error);
-            setMessage({ text: error instanceof Error ? error.message : 'An unknown error occurred', type: 'danger' });
+            setMessage({ text: error instanceof AxiosError ? error.response?.data.message : 'An unknown error occurred', type: 'danger' });
         } finally {
             setIsLoading(false);
         }
@@ -119,13 +121,13 @@ const ProfilePage = () => {
     const handleRoleChange = async (userId: number, newRole: Role) => {
         try {
             setIsLoading(true);
-            await api.patch(`/users/${userId}/role`, { role: newRole });
+            await api.patch(`/users/${userId}`, { role: newRole });
 
             setMessage({ text: 'User role updated successfully', type: 'success' });
             await fetchUsers();
         } catch (error) {
             console.error('Error updating user role:', error);
-            setMessage({ text: error instanceof Error ? error.message : 'An unknown error occurred', type: 'danger' });
+            setMessage({ text: error instanceof AxiosError ? error.response?.data.message : 'An unknown error occurred', type: 'danger' });
         } finally {
             setIsLoading(false);
         }
