@@ -138,7 +138,7 @@
                   marginBottom: '0.5rem',
                   color: 'white'
                 }}>
-                  Név
+                  Beszállító Neve
                 </label>
                 <input
                   id="name"
