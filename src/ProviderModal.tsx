@@ -1,6 +1,7 @@
   import React, { useState } from 'react';
   import { useForm } from 'react-hook-form';
   import 'bootstrap/dist/css/bootstrap.min.css'; 
+import { api } from './environments/api';
 
   interface CreateProviderDto {
     name: string;
@@ -35,23 +36,10 @@
       setApiError(null);
       
       try {
-        const response = await fetch('http://localhost:3000/orders/provider', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data)
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to create provider');
-        }
-
+        const response = await api.post('/orders/provider', data);
         reset();
         onClose();
         if (onSuccess) onSuccess();
-        
       } catch (error) {
         console.error('API Error:', error);
         setApiError(error instanceof Error ? error.message : 'An unexpected error occurred');
