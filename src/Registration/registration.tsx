@@ -42,10 +42,6 @@ const RegisterForm = () => {
       setError((err as Error).message);
     }
   };
-
-  useEffect(() => {
-    document.title = "Regisztráció";
-  }, []);
   
   return (
     <div className={classes.container}>

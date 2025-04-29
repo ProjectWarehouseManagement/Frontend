@@ -213,29 +213,102 @@ const AddDeliveryModal = () => {
   };
 
   return (
-    <div className="delivery-form-container">
-      <h2>Outgoing Delivery Creation</h2>
+    <div style={{
+      marginTop: '50px',
+      padding: '2rem',
+      background: 'radial-gradient(at 50% 50%, hsla(220, 30%, 15%, 1), hsla(220, 30%, 5%, 1))',
+      boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.6)',
+      border: '1px solid hsla(220, 30%, 40%, 0.3)',
+      color: 'white',
+      minHeight: '100vh'
+    }}>
+      <h2 style={{
+        fontSize: '1.75rem',
+        fontWeight: 'bold',
+        marginBottom: '1.5rem',
+        color: 'hsla(220, 70%, 60%, 1)',
+        borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)',
+        paddingBottom: '0.75rem'
+      }}>
+        Outgoing Delivery Creation
+      </h2>
 
-      {error && <div className="error-message">{error}</div>}
-      {success && <div className="success-message">{success}</div>}
+      {error && (
+        <div style={{
+          backgroundColor: 'hsla(0, 70%, 40%, 0.2)',
+          border: '1px solid hsla(0, 70%, 40%, 1)',
+          color: 'hsla(0, 70%, 70%, 1)',
+          padding: '1rem',
+          borderRadius: '0.5rem',
+          marginBottom: '1.5rem'
+        }}>
+          {error}
+        </div>
+      )}
 
-      <form onSubmit={handleSubmit} className="delivery-form">
-        <div className="form-row">
-          <div className="form-group">
-            <label>Delivery Date</label>
+      {success && (
+        <div style={{
+          backgroundColor: 'hsla(120, 100%, 25%, 0.2)',
+          border: '1px solid #4CAF50',
+          color: '#4CAF50',
+          padding: '1rem',
+          borderRadius: '0.5rem',
+          marginBottom: '1.5rem'
+        }}>
+          {success}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} style={{ marginBottom: '2rem' }}>
+        <div style={{
+          display: 'flex',
+          gap: '1.5rem',
+          marginBottom: '1.5rem',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{ flex: 1, minWidth: '200px' }}>
+            <label style={{
+              display: 'block',
+              marginBottom: '0.5rem',
+              color: 'hsla(220, 30%, 70%, 1)'
+            }}>
+              Delivery Date
+            </label>
             <input
               type="date"
               value={deliveryDate}
               onChange={(e) => setDeliveryDate(e.target.value)}
               required
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #555',
+                borderRadius: '5px',
+                backgroundColor: 'black',
+                color: 'white'
+              }}
             />
           </div>
-          <div className="form-group">
-            <label>Delivery Address</label>
+          <div style={{ flex: 1, minWidth: '200px' }}>
+            <label style={{
+              display: 'block',
+              marginBottom: '0.5rem',
+              color: 'hsla(220, 30%, 70%, 1)'
+            }}>
+              Delivery Address
+            </label>
             <select
               value={selectedAddressId ?? ''}
               onChange={(e) => setSelectedAddressId(Number(e.target.value))}
               required
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #555',
+                borderRadius: '5px',
+                backgroundColor: 'black',
+                color: 'white'
+              }}
             >
               {addresses.map(address => (
                 <option key={address.id} value={address.id}>
@@ -244,12 +317,26 @@ const AddDeliveryModal = () => {
               ))}
             </select>
           </div>
-          <div className="form-group">
-            <label>Warehouse</label>
+          <div style={{ flex: 1, minWidth: '200px' }}>
+            <label style={{
+              display: 'block',
+              marginBottom: '0.5rem',
+              color: 'hsla(220, 30%, 70%, 1)'
+            }}>
+              Warehouse
+            </label>
             <select
               value={selectedWarehouseId ?? ''}
               onChange={(e) => setSelectedWarehouseId(Number(e.target.value))}
               required
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                border: '1px solid #555',
+                borderRadius: '5px',
+                backgroundColor: 'black',
+                color: 'white'
+              }}
             >
               {warehouses.map(warehouse => (
                 <option key={warehouse.id} value={warehouse.id}>
@@ -260,34 +347,88 @@ const AddDeliveryModal = () => {
           </div>
         </div>
 
-        {/* Rest of the form remains the same */}
-        <div className="product-search">
-          <label>Search Products</label>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <label style={{
+            display: 'block',
+            marginBottom: '0.5rem',
+            color: 'hsla(220, 30%, 70%, 1)'
+          }}>
+            Search Products
+          </label>
           <input
             type="text"
             placeholder="Search by name or barcode"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             disabled={isLoading}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              border: '1px solid #555',
+              borderRadius: '5px',
+              backgroundColor: 'black',
+              color: 'white'
+            }}
           />
         </div>
 
-        <div className="products-section">
-          <div className="available-products">
-            <h5>Available Products ({filteredInventories.length})</h5>
-            <div className="product-grid">
+        <div style={{
+          display: 'flex',
+          gap: '1.5rem',
+          marginBottom: '1.5rem',
+          flexWrap: 'wrap'
+        }}>
+          <div style={{
+            flex: 1,
+            minWidth: '300px',
+            background: 'hsla(220, 30%, 15%, 0.5)',
+            borderRadius: '8px',
+            padding: '1rem',
+            border: '1px solid hsla(220, 30%, 40%, 0.3)'
+          }}>
+            <h5 style={{
+              fontSize: '1.1rem',
+              marginBottom: '1rem',
+              color: 'hsla(220, 70%, 60%, 1)'
+            }}>
+              Available Products ({filteredInventories.length})
+            </h5>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+              gap: '1rem',
+              maxHeight: '400px',
+              overflowY: 'auto',
+              padding: '0.5rem'
+            }}>
               {filteredInventories.map(inv => (
-                <div key={inv.id} className="product-card">
-                  <div className="product-info">
-                    <h4>{inv.product.name}</h4>
-                    <p>Barcode: {inv.product.barcode}</p>
-                    <p>Stock: {inv.quantity}</p>
-                    <p>Price: {inv.product.unitPrice} Ft</p>
+                <div key={inv.id} style={{
+                  background: 'hsla(220, 30%, 20%, 0.5)',
+                  borderRadius: '6px',
+                  padding: '1rem',
+                  border: '1px solid hsla(220, 30%, 40%, 0.3)'
+                }}>
+                  <div style={{ marginBottom: '0.5rem' }}>
+                    <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>{inv.product.name}</h4>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Barcode: {inv.product.barcode}</p>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Stock: {inv.quantity}</p>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Price: {inv.product.unitPrice} Ft</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => addProductToDelivery(inv)}
                     disabled={selectedProducts.some(p => p.inventoryId === inv.id)}
+                    style={{
+                      width: '100%',
+                      padding: '0.5rem',
+                      backgroundColor: selectedProducts.some(p => p.inventoryId === inv.id) 
+                        ? 'hsla(220, 30%, 30%, 1)' 
+                        : 'hsla(220, 70%, 8%, 1)',
+                      color: 'white',
+                      border: '1px solid hsla(220, 70%, 20%, 1)',
+                      borderRadius: '4px',
+                      cursor: selectedProducts.some(p => p.inventoryId === inv.id) ? 'not-allowed' : 'pointer'
+                    }}
                   >
                     Add to Delivery
                   </button>
@@ -296,79 +437,155 @@ const AddDeliveryModal = () => {
             </div>
           </div>
 
-          <div className="selected-products">
-            <h5>Delivery Items ({selectedProducts.length})</h5>
+          <div style={{
+            flex: 1,
+            minWidth: '300px',
+            background: 'hsla(220, 30%, 15%, 0.5)',
+            borderRadius: '8px',
+            padding: '1rem',
+            border: '1px solid hsla(220, 30%, 40%, 0.3)'
+          }}>
+            <h5 style={{
+              fontSize: '1.1rem',
+              marginBottom: '1rem',
+              color: 'hsla(220, 70%, 60%, 1)'
+            }}>
+              Delivery Items ({selectedProducts.length})
+            </h5>
             {selectedProducts.length > 0 ? (
-              <table>
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Price (Ft)</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedProducts.map((item, index) => {
-                    const inventory = inventories.find(inv => inv.id === item.inventoryId);
-                    const maxQuantity = inventory?.quantity || 0;
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{
+                  width: '100%',
+                  borderCollapse: 'collapse',
+                  color: 'white'
+                }}>
+                  <thead>
+                    <tr style={{
+                      backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
+                      borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
+                    }}>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Product</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Quantity</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Price (Ft)</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedProducts.map((item, index) => {
+                      const inventory = inventories.find(inv => inv.id === item.inventoryId);
+                      const maxQuantity = inventory?.quantity || 0;
 
-                    return (
-                      <tr key={index}>
-                        <td>{item.productName}</td>
-                        <td>
-                          <input
-                            type="number"
-                            min="1"
-                            max={maxQuantity}
-                            value={item.quantity}
-                            onChange={(e) => updateProduct(index, 'quantity', Number(e.target.value))}
-                            required
-                          />
-                        </td>
-                        <td>
-                          <input
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            value={item.sellingPrice}
-                            onChange={(e) => updateProduct(index, 'sellingPrice', Number(e.target.value))}
-                            required
-                          />
-                        </td>
-                        <td>
-                          <button
-                            type="button"
-                            className="remove-button"
-                            onClick={() => removeProduct(index)}
-                          >
-                            Remove
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                      return (
+                        <tr key={index} style={{
+                          borderBottom: '1px solid hsla(220, 30%, 40%, 0.1)'
+                        }}>
+                          <td style={{ padding: '0.75rem' }}>{item.productName}</td>
+                          <td style={{ padding: '0.75rem' }}>
+                            <input
+                              type="number"
+                              min="1"
+                              max={maxQuantity}
+                              value={item.quantity}
+                              onChange={(e) => updateProduct(index, 'quantity', Number(e.target.value))}
+                              required
+                              style={{
+                                width: '80px',
+                                padding: '0.5rem',
+                                border: '1px solid #555',
+                                borderRadius: '4px',
+                                backgroundColor: 'black',
+                                color: 'white'
+                              }}
+                            />
+                          </td>
+                          <td style={{ padding: '0.75rem' }}>
+                            <input
+                              type="number"
+                              min="0"
+                              step="0.01"
+                              value={item.sellingPrice}
+                              onChange={(e) => updateProduct(index, 'sellingPrice', Number(e.target.value))}
+                              required
+                              style={{
+                                width: '100px',
+                                padding: '0.5rem',
+                                border: '1px solid #555',
+                                borderRadius: '4px',
+                                backgroundColor: 'black',
+                                color: 'white'
+                              }}
+                            />
+                          </td>
+                          <td style={{ padding: '0.75rem' }}>
+                            <button
+                              type="button"
+                              onClick={() => removeProduct(index)}
+                              style={{
+                                padding: '0.5rem 1rem',
+                                backgroundColor: 'hsla(0, 70%, 40%, 1)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              Remove
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             ) : (
-              <p className="empty-message">No products added to delivery yet</p>
+              <p style={{
+                textAlign: 'center',
+                color: 'hsla(220, 30%, 70%, 1)',
+                padding: '1.5rem 0'
+              }}>
+                No products added to delivery yet
+              </p>
             )}
           </div>
         </div>
 
-        <div className="form-actions">
+        <div style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          gap: '1rem',
+          marginTop: '1.5rem',
+          paddingTop: '1.5rem',
+          borderTop: '1px solid hsla(220, 30%, 40%, 0.3)'
+        }}>
           <button
             type="button"
-            className="reset-button"
             onClick={resetForm}
             disabled={isLoading}
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: 'transparent',
+              color: 'white',
+              border: '1px solid hsla(220, 30%, 40%, 1)',
+              borderRadius: '20px',
+              cursor: 'pointer'
+            }}
           >
             Clear All
           </button>
           <button
             type="submit"
-            className="submit-button"
             disabled={isLoading || selectedProducts.length === 0}
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: selectedProducts.length === 0 
+                ? 'hsla(220, 30%, 30%, 1)' 
+                : 'hsla(220, 70%, 8%, 1)',
+              color: 'white',
+              border: '1px solid hsla(220, 70%, 20%, 1)',
+              borderRadius: '20px',
+              cursor: selectedProducts.length === 0 ? 'not-allowed' : 'pointer'
+            }}
           >
             {isLoading ? 'Creating Delivery...' : 'Create Delivery'}
           </button>

@@ -30,7 +30,7 @@ const ProfilePage = () => {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [isAdminView, setIsAdminView] = useState(false);
-    const [isLoading, setIsLoading] = useState(true); // Start with loading true
+    const [isLoading, setIsLoading] = useState(true);
     const [message, setMessage] = useState<{ text: string; type: 'success' | 'danger' } | null>(null);
     const { user: authUser } = useAuth();
 
@@ -40,11 +40,7 @@ const ProfilePage = () => {
         const fetchUserData = async () => {
             try {
                 if (authUser?.sub) {
-                    console.log('Fetching user data for ID:', authUser.sub); // Debug log
                     const response = await api.get(`/users/${authUser.sub}`);
-                    console.log('User data received:', response.data); // Debug log
-                    
-                    // Ensure the data matches your User interface
                     const userData: User = {
                         id: response.data.id,
                         email: response.data.email,
@@ -53,7 +49,7 @@ const ProfilePage = () => {
                         phoneNumber: response.data.phoneNumber || null,
                         role: response.data.role || 'USER'
                     };
-                    
+
                     setCurrentUser(userData);
                     reset({
                         email: userData.email,
@@ -61,7 +57,7 @@ const ProfilePage = () => {
                         lastName: userData.lastName || '',
                         phoneNumber: userData.phoneNumber || ''
                     });
-                    
+
                     if (userData.role === 'ADMIN') {
                         await fetchUsers();
                     }
@@ -73,7 +69,7 @@ const ProfilePage = () => {
                 setIsLoading(false);
             }
         };
-    
+
         fetchUserData();
     }, [authUser, reset]);
 
@@ -135,7 +131,13 @@ const ProfilePage = () => {
 
     if (isLoading) {
         return (
-            <div className="container mt-4 d-flex justify-content-center">
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: 'calc(100vh - 56px)',
+                marginTop: '56px'
+            }}>
                 <div className="spinner-border" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </div>
@@ -145,69 +147,140 @@ const ProfilePage = () => {
 
     if (!currentUser) {
         return (
-            <div className="container mt-4">
-                <div className="alert alert-danger">
-                    Failed to load profile data. Please try again later.
+            <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: 'calc(100vh - 56px)',
+                marginTop: '56px',
+                position: 'relative',
+                width: '100%',
+                background: 'radial-gradient(at 50% 50%, hsla(220, 30%, 15%, 1), hsla(220, 30%, 5%, 1)',
+                backgroundRepeat: 'no-repeat',
+                overflowY: 'auto'
+            }}>
+                <div style={{
+                    margin: '20px 0',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    padding: '2rem',
+                    borderRadius: '12px',
+                    background: 'hsla(220, 30%, 10%, 0.9)',
+                    width: '90%',
+                    maxWidth: '450px',
+                    boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.6), 0px 15px 35px rgba(0, 0, 0, 0.3)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid hsla(220, 30%, 40%, 0.3)',
+                    color: 'white'
+                }}>
+                    <div style={{
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        marginBottom: '1rem',
+                        color: '#FF5252'
+                    }}>
+                        Failed to load profile data. Please try again later.
+                    </div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="container mt-4">
-            <h1 className="mb-4">Profile</h1>
+        <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: 'calc(100vh - 56px)',
+            marginTop: '56px',
+            position: 'relative',
+            width: '100%',
+            background: 'radial-gradient(at 50% 50%, hsla(220, 30%, 15%, 1), hsla(220, 30%, 5%, 1)',
+            backgroundRepeat: 'no-repeat',
+            overflowY: 'auto',
+            padding: '20px 0'
+        }}>
+            <div style={{
+                margin: '20px 0',
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '2rem',
+                borderRadius: '12px',
+                background: 'hsla(220, 30%, 10%, 0.9)',
+                width: '90%',
+                maxWidth: '1200px',
+                boxShadow: '0px 5px 15px rgba(0, 0, 0, 0.6), 0px 15px 35px rgba(0, 0, 0, 0.3)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid hsla(220, 30%, 40%, 0.3)',
+                color: 'white',
+                textAlign: 'center'
+            }}>
+                <h1 style={{ marginBottom: '1.5rem' }}>Profile</h1>
 
-            {message && (
-                <div className={`alert alert-${message.type} mb-4`}>
-                    {message.text}
-                </div>
-            )}
+                {message && (
+                    <div style={{
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        marginBottom: '1.5rem',
+                        color: message.type === 'success' ? '#4CAF50' : '#FF5252'
+                    }}>
+                        {message.text}
+                    </div>
+                )}
 
-            {currentUser.role === 'ADMIN' && (
-                <div className="mb-4">
-                    <button
-                        onClick={() => setIsAdminView(!isAdminView)}
-                        className={`btn ${isAdminView ? 'btn-secondary' : 'btn-primary'}`}
-                    >
-                        {isAdminView ? 'View My Profile' : 'View All Users'}
-                    </button>
-                </div>
-            )}
+                {isAdminView ? (
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <h2 style={{
+                            fontSize: 'clamp(2rem, 10vw, 2.15rem)',
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            color: 'white',
+                            marginBottom: '1rem'
+                        }}>User Management</h2>
 
-            {isAdminView ? (
-                <div className="card mb-4">
-                    <div className="card-body">
-                        <h2 className="card-title mb-4">User Management</h2>
                         {isLoading ? (
-                            <div className="d-flex justify-content-center">
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
                                 <div className="spinner-border" role="status">
                                     <span className="visually-hidden">Loading...</span>
                                 </div>
                             </div>
                         ) : (
-                            <div className="table-responsive">
-                                <table className="table table-striped table-hover">
+                            <div style={{ overflowX: 'auto' }}>
+                                <table style={{
+                                    width: '100%',
+                                    marginBottom: '1rem',
+                                    color: 'white',
+                                    borderCollapse: 'collapse'
+                                }}>
                                     <thead>
                                         <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Role</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>ID</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>Email</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>Name</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>Role</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {users.map((user) => (
                                             <tr key={user.id}>
-                                                <td>{user.id}</td>
-                                                <td>{user.email}</td>
-                                                <td>
+                                                <td style={{ padding: '0.75rem' }}>{user.id}</td>
+                                                <td style={{ padding: '0.75rem' }}>{user.email}</td>
+                                                <td style={{ padding: '0.75rem' }}>
                                                     {user.firstName} {user.lastName}
                                                 </td>
-                                                <td>
+                                                <td style={{ padding: '0.75rem' }}>
                                                     <select
                                                         value={user.role}
                                                         onChange={(e) => handleRoleChange(user.id, e.target.value as Role)}
-                                                        className="form-select form-select-sm"
+                                                        style={{
+                                                            width: '100%',
+                                                            padding: '0.375rem 0.75rem',
+                                                            fontSize: '1rem',
+                                                            backgroundColor: 'black',
+                                                            color: 'white',
+                                                            border: '1px solid #555',
+                                                            borderRadius: '5px'
+                                                        }}
                                                         disabled={user.id === currentUser.id}
                                                     >
                                                         <option value="USER">User</option>
@@ -220,88 +293,201 @@ const ProfilePage = () => {
                                 </table>
                             </div>
                         )}
+
+                        <div style={{ marginTop: '1.5rem' }}>
+                            <button
+                                onClick={() => setIsAdminView(false)}
+                                style={{
+                                    fontFamily: '"Playfair Display", serif',
+                                    backgroundColor: '#6c757d',
+                                    color: 'white',
+                                    padding: '12px',
+                                    fontSize: '1.1rem',
+                                    border: '1px solid hsla(220, 70%, 20%, 1)',
+                                    borderRadius: '20px',
+                                    cursor: 'pointer',
+                                    width: '100%'
+                                }}
+                                onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
+                                onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
+                            >
+                                Back to My Profile
+                            </button>
+                        </div>
                     </div>
-                </div>
-            ) : (
-                <div className="card mb-4">
-                    <div className="card-body">
-                        <div className="d-flex justify-content-between align-items-center mb-4">
-                            <h2 className="card-title mb-0">Personal Information</h2>
-                            {!isEditing && (
-                                <button
-                                    onClick={() => setIsEditing(true)}
-                                    className="btn btn-primary"
-                                >
-                                    Edit Profile
-                                </button>
-                            )}
+                ) : (
+                    <div>
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginBottom: '1.5rem',
+                            width: '100%'
+                        }}>
+                            <h2 style={{
+                                fontSize: 'clamp(2rem, 10vw, 2.15rem)',
+                                fontWeight: 'bold',
+                                color: 'white',
+                                marginBottom: '0',
+                                textAlign: 'center',
+                                width: '100%'
+                            }}>Personal Information</h2>
                         </div>
 
                         {isEditing ? (
                             <form onSubmit={handleSubmit(onSubmit)}>
-                                <div className="    row mb-4">
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="email" className="form-label">Email</label>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+                                    <div style={{ flex: '1 1 45%' }}>
+                                        <label htmlFor="email" style={{ display: 'block', marginBottom: '0.5rem' }}>Email</label>
                                         <input
                                             id="email"
                                             type="email"
                                             {...register('email', { required: 'Email is required' })}
-                                            className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+                                            style={{
+                                                width: '100%',
+                                                padding: '12px',
+                                                border: `1px solid ${errors.email ? '#FF5252' : '#555'}`,
+                                                borderRadius: '5px',
+                                                fontSize: '1rem',
+                                                backgroundColor: 'black',
+                                                color: 'white',
+                                                transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease'
+                                            }}
                                             disabled={isLoading}
+                                            onFocus={(e) => {
+                                                e.target.style.border = '1px solid white';
+                                                e.target.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.7)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.border = `1px solid ${errors.email ? '#FF5252' : '#555'}`;
+                                                e.target.style.boxShadow = 'none';
+                                            }}
                                         />
-                                        {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
+                                        {errors.email && (
+                                            <div style={{ color: '#FF5252', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                                                {errors.email.message}
+                                            </div>
+                                        )}
                                     </div>
 
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
+                                    <div style={{ flex: '1 1 45%' }}>
+                                        <label htmlFor="phoneNumber" style={{ display: 'block', marginBottom: '0.5rem' }}>Phone Number</label>
                                         <input
                                             id="phoneNumber"
                                             type="tel"
                                             {...register('phoneNumber')}
-                                            className="form-control"
+                                            style={{
+                                                width: '100%',
+                                                padding: '12px',
+                                                border: '1px solid #555',
+                                                borderRadius: '5px',
+                                                fontSize: '1rem',
+                                                backgroundColor: 'black',
+                                                color: 'white',
+                                                transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease'
+                                            }}
                                             disabled={isLoading}
+                                            onFocus={(e) => {
+                                                e.target.style.border = '1px solid white';
+                                                e.target.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.7)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.border = '1px solid #555';
+                                                e.target.style.boxShadow = 'none';
+                                            }}
                                         />
                                     </div>
 
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="firstName" className="form-label">First Name</label>
+                                    <div style={{ flex: '1 1 45%' }}>
+                                        <label htmlFor="firstName" style={{ display: 'block', marginBottom: '0.5rem' }}>First Name</label>
                                         <input
                                             id="firstName"
                                             type="text"
                                             {...register('firstName')}
-                                            className="form-control"
+                                            style={{
+                                                width: '100%',
+                                                padding: '12px',
+                                                border: '1px solid #555',
+                                                borderRadius: '5px',
+                                                fontSize: '1rem',
+                                                backgroundColor: 'black',
+                                                color: 'white',
+                                                transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease'
+                                            }}
                                             disabled={isLoading}
+                                            onFocus={(e) => {
+                                                e.target.style.border = '1px solid white';
+                                                e.target.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.7)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.border = '1px solid #555';
+                                                e.target.style.boxShadow = 'none';
+                                            }}
                                         />
                                     </div>
 
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="lastName" className="form-label">Last Name</label>
+                                    <div style={{ flex: '1 1 45%' }}>
+                                        <label htmlFor="lastName" style={{ display: 'block', marginBottom: '0.5rem' }}>Last Name</label>
                                         <input
                                             id="lastName"
                                             type="text"
                                             {...register('lastName')}
-                                            className="form-control"
+                                            style={{
+                                                width: '100%',
+                                                padding: '12px',
+                                                border: '1px solid #555',
+                                                borderRadius: '5px',
+                                                fontSize: '1rem',
+                                                backgroundColor: 'black',
+                                                color: 'white',
+                                                transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease'
+                                            }}
                                             disabled={isLoading}
+                                            onFocus={(e) => {
+                                                e.target.style.border = '1px solid white';
+                                                e.target.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.7)';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.border = '1px solid #555';
+                                                e.target.style.boxShadow = 'none';
+                                            }}
                                         />
                                     </div>
                                 </div>
 
-                                <div className="mb-4">
-                                    <h3 className="h5 mb-3">Change Password</h3>
-                                    <div className="row g-3">
-                                        <div className="col-md-4">
-                                            <label htmlFor="currentPassword" className="form-label">Current Password</label>
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>Change Password</h3>
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+                                        <div style={{ flex: '1 1 30%' }}>
+                                            <label htmlFor="currentPassword" style={{ display: 'block', marginBottom: '0.5rem' }}>Current Password</label>
                                             <input
                                                 id="currentPassword"
                                                 type="password"
                                                 {...register('currentPassword')}
-                                                className="form-control"
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '12px',
+                                                    border: '1px solid #555',
+                                                    borderRadius: '5px',
+                                                    fontSize: '1rem',
+                                                    backgroundColor: 'black',
+                                                    color: 'white',
+                                                    transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease'
+                                                }}
                                                 disabled={isLoading}
+                                                onFocus={(e) => {
+                                                    e.target.style.border = '1px solid white';
+                                                    e.target.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.7)';
+                                                }}
+                                                onBlur={(e) => {
+                                                    e.target.style.border = '1px solid #555';
+                                                    e.target.style.boxShadow = 'none';
+                                                }}
                                             />
                                         </div>
 
-                                        <div className="col-md-4">
-                                            <label htmlFor="newPassword" className="form-label">New Password</label>
+                                        <div style={{ flex: '1 1 30%' }}>
+                                            <label htmlFor="newPassword" style={{ display: 'block', marginBottom: '0.5rem' }}>New Password</label>
                                             <input
                                                 id="newPassword"
                                                 type="password"
@@ -317,16 +503,35 @@ const ProfilePage = () => {
                                                         return true;
                                                     },
                                                 })}
-                                                className={`form-control ${errors.newPassword ? 'is-invalid' : ''}`}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '12px',
+                                                    border: `1px solid ${errors.newPassword ? '#FF5252' : '#555'}`,
+                                                    borderRadius: '5px',
+                                                    fontSize: '1rem',
+                                                    backgroundColor: 'black',
+                                                    color: 'white',
+                                                    transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease'
+                                                }}
                                                 disabled={isLoading}
+                                                onFocus={(e) => {
+                                                    e.target.style.border = '1px solid white';
+                                                    e.target.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.7)';
+                                                }}
+                                                onBlur={(e) => {
+                                                    e.target.style.border = `1px solid ${errors.newPassword ? '#FF5252' : '#555'}`;
+                                                    e.target.style.boxShadow = 'none';
+                                                }}
                                             />
                                             {errors.newPassword && (
-                                                <div className="invalid-feedback">{errors.newPassword.message}</div>
+                                                <div style={{ color: '#FF5252', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                                                    {errors.newPassword.message}
+                                                </div>
                                             )}
                                         </div>
 
-                                        <div className="col-md-4">
-                                            <label htmlFor="confirmPassword" className="form-label">Confirm New Password</label>
+                                        <div style={{ flex: '1 1 30%' }}>
+                                            <label htmlFor="confirmPassword" style={{ display: 'block', marginBottom: '0.5rem' }}>Confirm New Password</label>
                                             <input
                                                 id="confirmPassword"
                                                 type="password"
@@ -338,32 +543,80 @@ const ProfilePage = () => {
                                                         return true;
                                                     },
                                                 })}
-                                                className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+                                                style={{
+                                                    width: '100%',
+                                                    padding: '12px',
+                                                    border: `1px solid ${errors.confirmPassword ? '#FF5252' : '#555'}`,
+                                                    borderRadius: '5px',
+                                                    fontSize: '1rem',
+                                                    backgroundColor: 'black',
+                                                    color: 'white',
+                                                    transition: 'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease'
+                                                }}
                                                 disabled={isLoading}
+                                                onFocus={(e) => {
+                                                    e.target.style.border = '1px solid white';
+                                                    e.target.style.boxShadow = '0 0 10px rgba(255, 255, 255, 0.7)';
+                                                }}
+                                                onBlur={(e) => {
+                                                    e.target.style.border = `1px solid ${errors.confirmPassword ? '#FF5252' : '#555'}`;
+                                                    e.target.style.boxShadow = 'none';
+                                                }}
                                             />
                                             {errors.confirmPassword && (
-                                                <div className="invalid-feedback">{errors.confirmPassword.message}</div>
+                                                <div style={{ color: '#FF5252', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                                                    {errors.confirmPassword.message}
+                                                </div>
                                             )}
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="d-flex justify-content-end gap-2">
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
                                     <button
                                         type="button"
                                         onClick={() => {
                                             setIsEditing(false);
                                             reset();
                                         }}
-                                        className="btn btn-outline-secondary"
+                                        style={{
+                                            fontFamily: '"Playfair Display", serif',
+                                            backgroundColor: 'transparent',
+                                            color: '#d3d3d3',
+                                            padding: '12px',
+                                            fontSize: '1.1rem',
+                                            border: '1px solid hsla(220, 30%, 40%, 0.3)',
+                                            borderRadius: '20px',
+                                            cursor: 'pointer',
+                                            textDecoration: 'none',
+                                            fontWeight: 'bold'
+                                        }}
                                         disabled={isLoading}
+                                        onMouseOver={(e) => {
+                                            e.currentTarget.style.textDecoration = 'underline';
+                                        }}
+                                        onMouseOut={(e) => {
+                                            e.currentTarget.style.textDecoration = 'none';
+                                        }}
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className="btn btn-primary"
+                                        style={{
+                                            fontFamily: '"Playfair Display", serif',
+                                            backgroundColor: 'hsla(220, 70%, 8%, 1)',
+                                            color: 'white',
+                                            padding: '12px',
+                                            fontSize: '1.1rem',
+                                            border: '1px solid hsla(220, 70%, 20%, 1)',
+                                            borderRadius: '20px',
+                                            cursor: 'pointer',
+                                            marginTop: '20px'
+                                        }}
                                         disabled={isLoading}
+                                        onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
+                                        onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
                                     >
                                         {isLoading ? (
                                             <>
@@ -375,36 +628,82 @@ const ProfilePage = () => {
                                 </div>
                             </form>
                         ) : (
-                            <div className="row">
-                                <div className="col-md-6 mb-3">
-                                    <h5 className="text-muted">Email</h5>
-                                    <p className="text-dark font-weight-normal">{currentUser?.email || 'Not available'}</p>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '5%', marginBottom:'5%' }}>
+                                <div style={{ flex: '1 1 45%' }}>
+                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Email</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal' }}>{currentUser?.email || 'Not available'}</p>
                                 </div>
 
-                                <div className="col-md-6 mb-3">
-                                    <h5 className="text-muted">Phone Number</h5>
-                                    <p className="text-dark font-weight-normal">{currentUser?.phoneNumber || 'Not provided'}</p>
+                                <div style={{ flex: '1 1 45%' }}>
+                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Phone Number</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal' }}>{currentUser?.phoneNumber || 'Not provided'}</p>
                                 </div>
 
-                                <div className="col-md-6 mb-3">
-                                    <h5 className="text-muted">First Name</h5>
-                                    <p className="text-dark font-weight-normal">{currentUser?.firstName || 'Not provided'}</p>
+                                <div style={{ flex: '1 1 45%' }}>
+                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>First Name</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal' }}>{currentUser?.firstName || 'Not provided'}</p>
                                 </div>
 
-                                <div className="col-md-6 mb-3">
-                                    <h5 className="text-muted">Last Name</h5>
-                                    <p className="text-dark font-weight-normal">{currentUser?.lastName || 'Not provided'}</p>
+                                <div style={{ flex: '1 1 45%' }}>
+                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Last Name</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal' }}>{currentUser?.lastName || 'Not provided'}</p>
                                 </div>
 
-                                <div className="col-md-6 mb-3">
-                                    <h5 className="text-muted">Role</h5>
-                                    <p className="text-dark font-weight-normal">{currentUser?.role?.toLowerCase() || 'Not provided'}</p>
+                                <div style={{ flex: '1 1 45%' }}>
+                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Role</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal' }}>{currentUser?.role?.toLowerCase() || 'Not provided'}</p>
                                 </div>
                             </div>
                         )}
+
+                        {currentUser.role === 'ADMIN' && !isEditing && (
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                marginTop: '1.5rem',
+                                gap: '1rem'
+                            }}>
+                                <button
+                                    onClick={() => setIsEditing(true)}
+                                    style={{
+                                        fontFamily: '"Playfair Display", serif',
+                                        backgroundColor: 'hsla(220, 70%, 8%, 1)',
+                                        color: 'white',
+                                        padding: '12px',
+                                        fontSize: '1.1rem',
+                                        border: '1px solid hsla(220, 70%, 20%, 1)',
+                                        borderRadius: '20px',
+                                        cursor: 'pointer',
+                                        flex: 1
+                                    }}
+                                    onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
+                                    onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
+                                >
+                                    Edit Profile
+                                </button>
+                                <button
+                                    onClick={() => setIsAdminView(true)}
+                                    style={{
+                                        fontFamily: '"Playfair Display", serif',
+                                        backgroundColor: 'hsla(220, 70%, 8%, 1)',
+                                        color: 'white',
+                                        padding: '12px',
+                                        fontSize: '1.1rem',
+                                        border: '1px solid hsla(220, 70%, 20%, 1)',
+                                        borderRadius: '20px',
+                                        cursor: 'pointer',
+                                        flex: 1
+                                    }}
+                                    onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
+                                    onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
+                                >
+                                    View All Users
+                                </button>
+                            </div>
+                        )}
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 };

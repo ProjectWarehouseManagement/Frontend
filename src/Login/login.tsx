@@ -28,7 +28,7 @@ const LoginForm: React.FC = () => {
   };
 
   useEffect(() => {
-    document.title = "Bejelentkezés";
+    document.title = "Saxon Kitchenware";
   }, []);
 
   return (
