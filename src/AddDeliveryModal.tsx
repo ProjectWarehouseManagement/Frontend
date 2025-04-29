@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { api } from './environments/api';
 
+// ASD
+
 interface Product {
   id: number;
   name: string;
