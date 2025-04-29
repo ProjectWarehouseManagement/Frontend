@@ -72,7 +72,7 @@ const OutgoingOrdersComponent = () => {
       setAddresses(addressesRes.data);
       setWarehouses(warehousesRes.data);
     } catch (err) {
-      setError(err instanceof AxiosError ? err.message : 'An unknown error occurred');
+      setError(err instanceof AxiosError ? err.message : 'Ismeretlen hiba történt');
     } finally {
       setLoading(false);
     }
@@ -92,7 +92,7 @@ const OutgoingOrdersComponent = () => {
       setDeliveries(deliveries.filter(delivery => delivery.id !== deliveryId));
       setSuccess('Delivery deleted successfully');
     } catch (err) {
-      setError(err instanceof AxiosError ? err.message : 'Failed to delete delivery');
+      setError(err instanceof AxiosError ? err.message : 'A rendelés törlése sikertelen');
     }
   };
 
@@ -129,10 +129,10 @@ const OutgoingOrdersComponent = () => {
         })
       ]);
 
-      setSuccess('Delivery updated successfully');
+      setSuccess('A rendelés sikeresen módosítva');
       setEditingDelivery(null);
     } catch (err) {
-      setError(err instanceof AxiosError ? err.message : 'Failed to update delivery');
+      setError(err instanceof AxiosError ? err.message : 'A rendelés módosítása sikertelen.');
       // Revert on error
       fetchData();
     } finally {
@@ -219,9 +219,9 @@ const OutgoingOrdersComponent = () => {
         textAlign: 'center'
       }}>
         <h2 style={{ color: 'hsla(220, 70%, 60%, 1)', marginBottom: '1rem' }}>
-          No Deliveries Found
+          Nincsenek megrendelések
         </h2>
-        <p style={{ marginBottom: '1.5rem' }}>There are currently no outgoing deliveries.</p>
+        <p style={{ marginBottom: '1.5rem' }}>Jelenleg nincsenek kimenő szállítmányok.</p>
         <button
           onClick={fetchData}
           style={{
@@ -233,7 +233,7 @@ const OutgoingOrdersComponent = () => {
             cursor: 'pointer'
           }}
         >
-          Refresh
+          Újra töltés
         </button>
       </div>
     );
@@ -255,7 +255,7 @@ const OutgoingOrdersComponent = () => {
         borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)',
         paddingBottom: '1rem'
       }}>
-        Outgoing Deliveries
+        Kimenő megrendelések
       </h1>
 
       {success && (
@@ -340,7 +340,7 @@ const OutgoingOrdersComponent = () => {
                   margin: 0,
                   color: 'hsla(220, 70%, 60%, 1)'
                 }}>
-                  Delivery #{delivery.id}
+                  Rendelés #{delivery.id}
                 </h2>
                 <button
                   onClick={() => setEditingDelivery(delivery)}
@@ -353,7 +353,7 @@ const OutgoingOrdersComponent = () => {
                     cursor: 'pointer'
                   }}
                 >
-                  Edit
+                  Módosítás
                 </button>
                 <button
                   onClick={() => handleDeleteDelivery(delivery.id)}
@@ -366,10 +366,10 @@ const OutgoingOrdersComponent = () => {
                     cursor: 'pointer'
                   }}
                 >
-                  Delete
+                  Törlés
                 </button>
                 <span style={{ color: 'hsla(220, 30%, 70%, 1)' }}>
-                  Date: {new Date(delivery.orderDate).toLocaleDateString()}
+                  Dátum: {new Date(delivery.orderDate).toLocaleDateString()}
                 </span>
               </div>
             </div>
@@ -386,17 +386,17 @@ const OutgoingOrdersComponent = () => {
                       backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
                       borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
                     }}>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Product</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Quantity</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Unit Price</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Total</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Expected Date</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Warehouse</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Address</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Total + VAT</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping Cost</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Final Total</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Termék neve</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Mennyiség</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Egységár</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Részösszeg</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Szállítási költség</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Várható szállítás</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Raktár</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Szállítási cím</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Összeg + ÁFA</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Szállítási költség</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Végösszeg</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -416,9 +416,9 @@ const OutgoingOrdersComponent = () => {
                             {product?.name || `Product ${detail.productId}`}
                           </td>
                           <td style={{ padding: '0.75rem' }}>{detail.OrderQuantity}</td>
-                          <td style={{ padding: '0.75rem' }}>HUF {detail.price.toFixed(2)}</td>
-                          <td style={{ padding: '0.75rem' }}>HUF {total.toFixed(2)}</td>
-                          <td style={{ padding: '0.75rem' }}>HUF {detail.shippingCost.toFixed(2)}</td>
+                          <td style={{ padding: '0.75rem' }}>{detail.price.toFixed(0)} Ft</td>
+                          <td style={{ padding: '0.75rem' }}>{total.toFixed(0)} Ft</td>
+                          <td style={{ padding: '0.75rem' }}>{detail.shippingCost.toFixed(0)} Ft</td>
                           <td style={{ padding: '0.75rem' }}>
                             {new Date(detail.ExpectedDate).toLocaleDateString()}
                           </td>
@@ -431,9 +431,9 @@ const OutgoingOrdersComponent = () => {
                               : `Address ${detail.addressId}`
                             }
                           </td>
-                          <td style={{ padding: '0.75rem' }}>HUF {totalWithVat.toFixed(2)}</td>
-                          <td style={{ padding: '0.75rem' }}>HUF {detail.shippingCost.toFixed(2)}</td>
-                          <td style={{ padding: '0.75rem' }}>HUF {finalTotal.toFixed(2)}</td>
+                          <td style={{ padding: '0.75rem' }}>{totalWithVat.toFixed(0)} Ft</td>
+                          <td style={{ padding: '0.75rem' }}>{detail.shippingCost.toFixed(0)} Ft</td>
+                          <td style={{ padding: '0.75rem' }}>{finalTotal.toFixed(0)} Ft</td>
                         </tr>
                       );
                     })}
@@ -511,7 +511,7 @@ const OutgoingOrdersComponent = () => {
                   color: 'hsla(220, 30%, 70%, 1)',
                   marginBottom: '1rem'
                 }}>
-                  Delivery Information
+                  Szállítási Adatok
                 </h3>
 
                 <div style={{ marginBottom: '1.5rem' }}>
@@ -520,7 +520,7 @@ const OutgoingOrdersComponent = () => {
                     marginBottom: '0.5rem',
                     color: 'white'
                   }}>
-                    Delivery Date
+                    Várható szállítás
                   </label>
                   <input
                     type="date"
@@ -547,7 +547,7 @@ const OutgoingOrdersComponent = () => {
                   color: 'hsla(220, 30%, 70%, 1)',
                   marginBottom: '1rem'
                 }}>
-                  Delivery Details
+                  Rendelés Adatai
                 </h3>
 
                 {editingDelivery.deliveryDetails.map((detail, index) => (
@@ -564,7 +564,7 @@ const OutgoingOrdersComponent = () => {
                         marginBottom: '0.5rem',
                         color: 'white'
                       }}>
-                        Product
+                        Termék neve
                       </label>
                       <select
                         value={detail.productId}
@@ -598,10 +598,10 @@ const OutgoingOrdersComponent = () => {
                           color: 'white'
                         }}
                       >
-                        <option value="">Select a product</option>
+                        <option value="">Válasszon egy terméket</option>
                         {products.map((product) => (
                           <option key={product.id} value={product.id}>
-                            {product.name} (HUF {product.unitPrice.toFixed(2)})
+                            {product.name} ({product.unitPrice.toFixed(0)} Ft)
                           </option>
                         ))}
                       </select>
@@ -614,7 +614,7 @@ const OutgoingOrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Quantity
+                          Mennyiség
                         </label>
                         <input
                           type="number"
@@ -645,7 +645,7 @@ const OutgoingOrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Unit Price (HUF)
+                          Egységár (HUF)
                         </label>
                         <input
                           type="number"
@@ -679,7 +679,7 @@ const OutgoingOrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Shipping Cost (HUF)
+                          Szállítási költség (HUF)
                         </label>
                         <input
                           type="number"
@@ -711,7 +711,7 @@ const OutgoingOrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Expected Date
+                          Várható szállítás
                         </label>
                         <input
                           type="date"
@@ -743,7 +743,7 @@ const OutgoingOrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Warehouse
+                          Raktár
                         </label>
                         <select
                           value={detail.warehouseId}
@@ -775,7 +775,7 @@ const OutgoingOrdersComponent = () => {
                             color: 'white'
                           }}
                         >
-                          <option value="">Select a warehouse</option>
+                          <option value="">Válasszon raktárat</option>
                           {warehouses.map((warehouse) => (
                             <option key={warehouse.id} value={warehouse.id}>
                               {warehouse.name}
@@ -790,7 +790,7 @@ const OutgoingOrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Shipping Address
+                          Szállítási cím
                         </label>
                         <select
                           value={detail.addressId}
@@ -824,7 +824,7 @@ const OutgoingOrdersComponent = () => {
                             color: 'white'
                           }}
                         >
-                          <option value="">Select an address</option>
+                          <option value="">Válasszon címet</option>
                           {addresses.map((address) => (
                             <option key={address.id} value={address.id}>
                               {address.street}, {address.city}, {address.postalCode}
@@ -857,7 +857,7 @@ const OutgoingOrdersComponent = () => {
                   cursor: 'pointer'
                 }}
               >
-                Cancel
+                Vissza
               </button>
               <button
                 onClick={() => handleUpdateDelivery(editingDelivery.id, editingDelivery)}
@@ -870,7 +870,7 @@ const OutgoingOrdersComponent = () => {
                   cursor: 'pointer'
                 }}
               >
-                Save Changes
+                Mentés
               </button>
             </div>
           </div>

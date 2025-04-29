@@ -103,7 +103,7 @@ const AddOrderForm: React.FC = () => {
           setProviderId(providersRes.data[0].id);
         }
       } catch (err) {
-        setError('Failed to load initial data');
+        setError('Nem sikerült betölteni a kezdeti adatokat');
       } finally {
         setIsLoading(false);
       }
@@ -187,7 +187,6 @@ const AddOrderForm: React.FC = () => {
 
         checkResults.forEach((result) => {
             if (result.exists && result.product) {
-              // Product exists - handle both single object and array responses
               const productData = Array.isArray(result.product) 
                 ? result.product[0] 
                 : result.product;
@@ -205,7 +204,6 @@ const AddOrderForm: React.FC = () => {
                 });
               }
             } else {
-              // Product needs to be uploaded
               const prod = validProducts.find(product => product.barcode === result.barcode);
               if (prod && prod.name) {
                 productsToUpload.push({
@@ -213,13 +211,13 @@ const AddOrderForm: React.FC = () => {
                   barcode: result.barcode
                 });
               } else {
-                console.error('Invalid product data:', prod);
+                console.error('Érvénytelen termékadatok:', prod);
               }
             }
           });
 
           productsToUpload.forEach(product => {
-            console.log('Product to upload:', product);
+            console.log('Feltöltendő termék:', product);
           });
   
           const uploadResponses = await Promise.all(
@@ -245,11 +243,11 @@ const AddOrderForm: React.FC = () => {
           setProducts(allProducts);
         
         setSuccess(
-            `${newProducts.length} new products uploaded, ` +
-            `${existingProducts.length} existing products loaded`
+            `${newProducts.length} új, ` +
+            `${existingProducts.length} meglévő termék hozzáadásra került`
           );
       } catch (error) {
-        setError(`Failed to process or upload products: ${error instanceof Error ? error.message : String(error)}`);
+        setError(`A termékek feltöltése sikertelen: ${error instanceof Error ? error.message : String(error)}`);
       } finally {
         setIsLoading(false);
       }
@@ -293,7 +291,7 @@ const AddOrderForm: React.FC = () => {
     e.preventDefault();
     
     if (!providerId || selectedProducts.length === 0) {
-      setError('Please select a provider and at least one product');
+      setError('Kérjük, válasszon egy beszállítót és legalább egy terméket.');
       return;
     }
 
@@ -320,10 +318,10 @@ const AddOrderForm: React.FC = () => {
         )
       );
       
-      setSuccess('Order created successfully!');
+      setSuccess('A rendelés létre hozása sikeres!');
       resetForm();
     } catch (error) {
-      setError(`Failed to create order: ${error instanceof Error ? error.message : String(error)}`);
+      setError(`A rendelést nem sikerült létre hozni: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setIsLoading(false);
     }
@@ -486,10 +484,10 @@ const AddOrderForm: React.FC = () => {
                     backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
                     borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
                   }}>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Name</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Barcode</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Price</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Action</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Termék neve</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Vonalkód</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Ár</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -546,14 +544,14 @@ const AddOrderForm: React.FC = () => {
                     backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
                     borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
                   }}>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Product</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Price (Ft)</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping (Ft)</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Quantity</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Expected Date</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Address</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Warehouse</th>
-                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Action</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Termék neve</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Ár (Ft)</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Szállítási költség (Ft)</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Mennyiség</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Várható szállítási dátum</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Cím</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}>Raktár</th>
+                    <th style={{ padding: '0.75rem', textAlign: 'left' }}></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -596,7 +594,7 @@ const AddOrderForm: React.FC = () => {
                               color: 'white'
                             }}
                             min="0"
-                            step="0.01"
+                            step="1"
                             value={item.shippingCost}
                             onChange={(e) => updateProduct(index, 'shippingCost', Number(e.target.value))}
                             required
@@ -715,10 +713,10 @@ const AddOrderForm: React.FC = () => {
         }}>
           <button 
             style={{
-              backgroundColor: 'hsla(220, 30%, 20%, 1)',
+              backgroundColor: 'hsla(220, 70%, 8%, 1)',
               color: 'white',
               padding: '0.75rem 1.5rem',
-              border: '1px solid hsla(220, 30%, 40%, 1)',
+              border: '1px solid hsla(220, 70%, 20%, 1)',
               borderRadius: '20px',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
@@ -749,7 +747,7 @@ const AddOrderForm: React.FC = () => {
                   display: 'inline-block',
                   width: '1rem',
                   height: '1rem',
-                  border: '2px solid rgba(255,255,255,0.3)',
+                  border: '2px solid white',
                   borderRadius: '50%',
                   borderTopColor: 'white',
                   animation: 'spin 1s linear infinite',

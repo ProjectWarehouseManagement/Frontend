@@ -1,7 +1,6 @@
   import React, { useState } from 'react';
   import { useForm } from 'react-hook-form';
   import 'bootstrap/dist/css/bootstrap.min.css'; 
-import { api } from './environments/api';
 
   interface CreateProviderDto {
     name: string;
@@ -36,13 +35,26 @@ import { api } from './environments/api';
       setApiError(null);
       
       try {
-        const response = await api.post('/orders/provider', data);
+        const response = await fetch('http://localhost:3000/orders/provider', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Beszállító hozzáadása sikertelen');
+        }
+
         reset();
         onClose();
         if (onSuccess) onSuccess();
+        
       } catch (error) {
         console.error('API Error:', error);
-        setApiError(error instanceof Error ? error.message : 'An unexpected error occurred');
+        setApiError(error instanceof Error ? error.message : 'Ismeretlen hiba történt.');
       } finally {
         setIsSubmitting(false);
       }
@@ -132,8 +144,8 @@ import { api } from './environments/api';
                   id="name"
                   type="text"
                   {...register('name', { 
-                    required: 'Provider name is required',
-                    validate: (value) => !!value.trim() || 'Name cannot be empty'
+                    required: 'Beszállító nevének megadása kötelező',
+                    validate: (value) => !!value.trim() || 'Beszállító neve nem lehet üres'
                   })}
                   className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                   onBlur={() => trigger('name')}
@@ -174,7 +186,7 @@ import { api } from './environments/api';
                   id="email"
                   type="email"
                   {...register('email', { 
-                    required: 'Email is required',
+                    required: 'A beszállító email címének megadása kötelező',
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                       message: 'Enter a valid email address'
@@ -219,7 +231,7 @@ import { api } from './environments/api';
                   id="phone"
                   type="tel"
                   {...register('phone', { 
-                    required: 'Phone number is required',
+                    required: 'A beszállító telefonszámának megadása kötelező',
                     validate: validatePhone
                   })}
                   className={`form-control ${errors.phone ? 'is-invalid' : ''}`}

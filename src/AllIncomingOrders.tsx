@@ -113,7 +113,7 @@ const OrdersComponent = () => {
         setAddresses(addressesRes.data);
         setWarehouses(warehousesRes.data);
       } catch (err) {
-        setError(err instanceof AxiosError ? err.message : 'An unknown error occurred');
+        setError(err instanceof AxiosError ? err.message : 'Ismeretlen hiba történt.');
       } finally {
         setLoading(false);
       }
@@ -127,9 +127,9 @@ const OrdersComponent = () => {
     try {
       await api.delete(`/orders/${orderId}`);
       setOrders(orders.filter(order => order.id !== orderId));
-      setSuccess('Order deleted successfully');
+      setSuccess('A megrendelés sikeresen törölve.');
     } catch (err) {
-      setError(err instanceof AxiosError ? err.message : 'Failed to delete order');
+      setError(err instanceof AxiosError ? err.message : 'Nem sikerült törölni a megrendelést');
     }
   };
 
@@ -168,10 +168,10 @@ const OrdersComponent = () => {
         })
       ]);
 
-      setSuccess('Order updated successfully');
+      setSuccess('A megrendelés hozzáadása/módosítása sikeresen megtörtént.');
       setEditingOrder(null);
     } catch (err) {
-      setError(err instanceof AxiosError ? err.message : 'Failed to update order');
+      setError(err instanceof AxiosError ? err.message : 'Megrendelés hozzáadása sikertelen.');
       // Revert optimistic update on error
       setRefreshKey(prev => prev + 1);
     } finally {
@@ -232,7 +232,7 @@ const OrdersComponent = () => {
             cursor: 'pointer'
           }}
         >
-          Try Again
+          Újra
         </button>
       </div>
     );
@@ -258,9 +258,9 @@ const OrdersComponent = () => {
         textAlign: 'center'
       }}>
         <h2 style={{ color: 'hsla(220, 70%, 60%, 1)', marginBottom: '1rem' }}>
-          No Orders Found
+          A rendelés nem található
         </h2>
-        <p style={{ marginBottom: '1.5rem' }}>There are currently no active orders.</p>
+        <p style={{ marginBottom: '1.5rem' }}>Jelenleg nincsenek aktív rendelés(ek).</p>
         <button
           onClick={() => setRefreshKey(prev => prev + 1)}
           style={{
@@ -272,7 +272,7 @@ const OrdersComponent = () => {
             cursor: 'pointer'
           }}
         >
-          Refresh
+          Újra töltés
         </button>
       </div>
     );
@@ -295,7 +295,7 @@ const OrdersComponent = () => {
         borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)',
         paddingBottom: '1rem'
       }}>
-        Incoming Orders
+        Bejövő rendelések
       </h1>
 
       {success && (
@@ -367,7 +367,7 @@ const OrdersComponent = () => {
                   margin: 0,
                   color: 'hsla(220, 70%, 60%, 1)'
                 }}>
-                  Order #{order.id}
+                  Rendelés #{order.id}
                 </h2>
                 <button
                   onClick={() => setEditingOrder(order)}
@@ -380,7 +380,7 @@ const OrdersComponent = () => {
                     cursor: 'pointer'
                   }}
                 >
-                  Edit
+                  Módosítás
                 </button>
                 <button
                   onClick={() => handleDeleteOrder(order.id)}
@@ -393,13 +393,13 @@ const OrdersComponent = () => {
                     cursor: 'pointer'
                   }}
                 >
-                  Delete
+                  Törlés
                 </button>
                 <span style={{ color: 'hsla(220, 30%, 70%, 1)' }}>
-                  Date: {new Date(order.orderDate).toLocaleDateString()}
+                  Dátum: {new Date(order.orderDate).toLocaleDateString()}
                 </span>
                 <span style={{ color: 'hsla(220, 30%, 70%, 1)' }}>
-                  Provider: {order.provider.name}
+                  Beszállító: {order.provider.name}
                 </span>
               </div>
             </div>
@@ -416,13 +416,13 @@ const OrdersComponent = () => {
                       backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
                       borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
                     }}>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Product</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Quantity</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Price</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Shipping</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Expected</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Warehouse</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Address</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Termék</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Mennyiség</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Ár</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Szállítási költség</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Várható szállítás</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Raktár</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Cím</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -434,8 +434,8 @@ const OrdersComponent = () => {
                           {detail.product?.name || `Product ${detail.productId}`}
                         </td>
                         <td style={{ padding: '0.75rem' }}>{detail.OrderQuantity}</td>
-                        <td style={{ padding: '0.75rem' }}>HUF {detail.price.toFixed(2)}</td>
-                        <td style={{ padding: '0.75rem' }}>HUF {detail.shippingCost.toFixed(2)}</td>
+                        <td style={{ padding: '0.75rem' }}>{detail.price.toFixed(0)} Ft</td>
+                        <td style={{ padding: '0.75rem' }}>{detail.shippingCost.toFixed(0)} Ft</td>
                         <td style={{ padding: '0.75rem' }}>
                           {new Date(detail.ExpectedDate).toLocaleDateString()}
                         </td>
@@ -456,7 +456,7 @@ const OrdersComponent = () => {
                 color: 'hsla(220, 30%, 70%, 1)',
                 padding: '1.5rem 0'
               }}>
-                No details available for this order.
+                Nincsenek elérhető adatok ehhez a rendeléshez.
               </div>
             )}
           </div>
@@ -498,7 +498,7 @@ const OrdersComponent = () => {
               paddingBottom: '1rem'
             }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0 }}>
-                Edit Order #{editingOrder.id}
+                Rendelés módosítása #{editingOrder.id}
               </h2>
               <button 
                 onClick={() => setEditingOrder(null)}
@@ -521,7 +521,7 @@ const OrdersComponent = () => {
                   color: 'hsla(220, 30%, 70%, 1)',
                   marginBottom: '1rem'
                 }}>
-                  Order Information
+                  Rendelés részletei
                 </h3>
 
                 <div style={{ marginBottom: '1.5rem' }}>
@@ -530,7 +530,7 @@ const OrdersComponent = () => {
                     marginBottom: '0.5rem',
                     color: 'white'
                   }}>
-                    Order Date
+                    Rendelés dátuma
                   </label>
                   <input
                     type="date"
@@ -556,7 +556,7 @@ const OrdersComponent = () => {
                     marginBottom: '0.5rem',
                     color: 'white'
                   }}>
-                    Provider
+                    Beszállító
                   </label>
                   <select
                     value={editingOrder.providerId}
@@ -597,7 +597,7 @@ const OrdersComponent = () => {
                   color: 'hsla(220, 30%, 70%, 1)',
                   marginBottom: '1rem'
                 }}>
-                  Order Details
+                  Rendelés adatai
                 </h3>
 
                 {editingOrder.orderDetails.map((detail, index) => (
@@ -614,7 +614,7 @@ const OrdersComponent = () => {
                         marginBottom: '0.5rem',
                         color: 'white'
                       }}>
-                        Product
+                        Termék
                       </label>
                       <select
                         value={detail.productId}
@@ -647,7 +647,7 @@ const OrdersComponent = () => {
                           color: 'white'
                         }}
                       >
-                        <option value="">Select a product</option>
+                        <option value="">Termék választása</option>
                         {products.map((product) => (
                           <option key={product.id} value={product.id}>
                             {product.name} (HUF {product.unitPrice.toFixed(2)})
@@ -663,7 +663,7 @@ const OrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Quantity
+                          Mennyiség
                         </label>
                         <input
                           type="number"
@@ -694,7 +694,7 @@ const OrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Unit Price (HUF)
+                          Darabár (HUF)
                         </label>
                         <input
                           type="number"
@@ -728,7 +728,7 @@ const OrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Shipping Cost (HUF)
+                          Szállítási költség (HUF)
                         </label>
                         <input
                           type="number"
@@ -760,7 +760,7 @@ const OrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Expected Date
+                          Várható szállítási dátum
                         </label>
                         <input
                           type="date"
@@ -792,7 +792,7 @@ const OrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Warehouse
+                          Raktár
                         </label>
                         <select
                           value={detail.warehouseId}
@@ -839,7 +839,7 @@ const OrdersComponent = () => {
                           marginBottom: '0.5rem',
                           color: 'white'
                         }}>
-                          Shipping Address
+                          Szállítási cím
                         </label>
                         <select
                           value={detail.addressId}
@@ -906,7 +906,7 @@ const OrdersComponent = () => {
                   cursor: 'pointer'
                 }}
               >
-                Cancel
+                Vissza
               </button>
               <button
                 onClick={() => handleUpdateOrder(editingOrder.id, editingOrder)}
@@ -919,7 +919,7 @@ const OrdersComponent = () => {
                   cursor: 'pointer'
                 }}
               >
-                Save Changes
+                Mentés
               </button>
             </div>
           </div>

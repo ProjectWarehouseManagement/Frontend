@@ -63,8 +63,8 @@ const ProfilePage = () => {
                     }
                 }
             } catch (error) {
-                console.error('Error fetching user data:', error);
-                setMessage({ text: 'Failed to load profile data', type: 'danger' });
+                console.error('Hiba a felhasználói adatok lekérésekor:', error);
+                setMessage({ text: 'Nem sikerült betölteni a profil adatokat.', type: 'danger' });
             } finally {
                 setIsLoading(false);
             }
@@ -79,8 +79,8 @@ const ProfilePage = () => {
             const response = await api.get('/users');
             setUsers(response.data);
         } catch (error) {
-            console.error('Error fetching users:', error);
-            setMessage({ text: 'Failed to fetch users', type: 'danger' });
+            console.error('Hiba a felhasználók lekérésekor:', error);
+            setMessage({ text: 'Sikertelen a felhasználók lekérése', type: 'danger' });
         } finally {
             setIsLoading(false);
         }
@@ -97,7 +97,7 @@ const ProfilePage = () => {
                 ...(data.newPassword ? { password: data.newPassword } : {}),
             });
 
-            setMessage({ text: 'Profile updated successfully', type: 'success' });
+            setMessage({ text: 'A profil sikeresen frissítve.', type: 'success' });
             setIsEditing(false);
             setCurrentUser(response.data);
             reset({
@@ -107,8 +107,8 @@ const ProfilePage = () => {
                 phoneNumber: response.data.phoneNumber,
             });
         } catch (error) {
-            console.error('Error updating profile:', error);
-            setMessage({ text: error instanceof AxiosError ? error.response?.data.message : 'An unknown error occurred', type: 'danger' });
+            console.error('Hiba a profil frissítésekor:', error);
+            setMessage({ text: error instanceof AxiosError ? error.response?.data.message : 'Ismeretlen hiba történt', type: 'danger' });
         } finally {
             setIsLoading(false);
         }
@@ -179,7 +179,7 @@ const ProfilePage = () => {
                         marginBottom: '1rem',
                         color: '#FF5252'
                     }}>
-                        Failed to load profile data. Please try again later.
+                        Nem sikerült betölteni a profil adatokat. Kérjük, próbálja meg később.
                     </div>
                 </div>
             </div>
@@ -215,7 +215,7 @@ const ProfilePage = () => {
                 color: 'white',
                 textAlign: 'center'
             }}>
-                <h1 style={{ marginBottom: '1.5rem' }}>Profile</h1>
+                <h1 style={{ marginBottom: '1.5rem' }}>Profil</h1>
 
                 {message && (
                     <div style={{
@@ -254,10 +254,10 @@ const ProfilePage = () => {
                                 }}>
                                     <thead>
                                         <tr>
-                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>ID</th>
-                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>Email</th>
-                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>Name</th>
-                                            <th style={{ padding: '0.75rem', textAlign: 'left' }}>Role</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'center' }}>ID</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'center' }}>Email</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'center' }}>Név</th>
+                                            <th style={{ padding: '0.75rem', textAlign: 'center' }}>Role</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -299,7 +299,7 @@ const ProfilePage = () => {
                                 onClick={() => setIsAdminView(false)}
                                 style={{
                                     fontFamily: '"Playfair Display", serif',
-                                    backgroundColor: '#6c757d',
+                                    backgroundColor: 'hsla(220, 70%, 8%, 1)',
                                     color: 'white',
                                     padding: '12px',
                                     fontSize: '1.1rem',
@@ -311,7 +311,7 @@ const ProfilePage = () => {
                                 onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
                                 onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
                             >
-                                Back to My Profile
+                                Vissza a profilomra
                             </button>
                         </div>
                     </div>
@@ -331,7 +331,7 @@ const ProfilePage = () => {
                                 marginBottom: '0',
                                 textAlign: 'center',
                                 width: '100%'
-                            }}>Personal Information</h2>
+                            }}>Adatok</h2>
                         </div>
 
                         {isEditing ? (
@@ -371,7 +371,7 @@ const ProfilePage = () => {
                                     </div>
 
                                     <div style={{ flex: '1 1 45%' }}>
-                                        <label htmlFor="phoneNumber" style={{ display: 'block', marginBottom: '0.5rem' }}>Phone Number</label>
+                                        <label htmlFor="phoneNumber" style={{ display: 'block', marginBottom: '0.5rem' }}>Telefonszám</label>
                                         <input
                                             id="phoneNumber"
                                             type="tel"
@@ -399,7 +399,7 @@ const ProfilePage = () => {
                                     </div>
 
                                     <div style={{ flex: '1 1 45%' }}>
-                                        <label htmlFor="firstName" style={{ display: 'block', marginBottom: '0.5rem' }}>First Name</label>
+                                        <label htmlFor="firstName" style={{ display: 'block', marginBottom: '0.5rem' }}>Kereszt név</label>
                                         <input
                                             id="firstName"
                                             type="text"
@@ -427,7 +427,7 @@ const ProfilePage = () => {
                                     </div>
 
                                     <div style={{ flex: '1 1 45%' }}>
-                                        <label htmlFor="lastName" style={{ display: 'block', marginBottom: '0.5rem' }}>Last Name</label>
+                                        <label htmlFor="lastName" style={{ display: 'block', marginBottom: '0.5rem' }}>Vezeték név</label>
                                         <input
                                             id="lastName"
                                             type="text"
@@ -456,10 +456,10 @@ const ProfilePage = () => {
                                 </div>
 
                                 <div style={{ marginBottom: '1.5rem' }}>
-                                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>Change Password</h3>
+                                    <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>Jelszó megváltoztatása</h3>
                                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
                                         <div style={{ flex: '1 1 30%' }}>
-                                            <label htmlFor="currentPassword" style={{ display: 'block', marginBottom: '0.5rem' }}>Current Password</label>
+                                            <label htmlFor="currentPassword" style={{ display: 'block', marginBottom: '0.5rem' }}>Jelenlegi jelszó</label>
                                             <input
                                                 id="currentPassword"
                                                 type="password"
@@ -487,7 +487,7 @@ const ProfilePage = () => {
                                         </div>
 
                                         <div style={{ flex: '1 1 30%' }}>
-                                            <label htmlFor="newPassword" style={{ display: 'block', marginBottom: '0.5rem' }}>New Password</label>
+                                            <label htmlFor="newPassword" style={{ display: 'block', marginBottom: '0.5rem' }}>Új jelszó</label>
                                             <input
                                                 id="newPassword"
                                                 type="password"
@@ -531,7 +531,7 @@ const ProfilePage = () => {
                                         </div>
 
                                         <div style={{ flex: '1 1 30%' }}>
-                                            <label htmlFor="confirmPassword" style={{ display: 'block', marginBottom: '0.5rem' }}>Confirm New Password</label>
+                                            <label htmlFor="confirmPassword" style={{ display: 'block', marginBottom: '0.5rem' }}>Új jelszó újra</label>
                                             <input
                                                 id="confirmPassword"
                                                 type="password"
@@ -581,15 +581,14 @@ const ProfilePage = () => {
                                         }}
                                         style={{
                                             fontFamily: '"Playfair Display", serif',
-                                            backgroundColor: 'transparent',
-                                            color: '#d3d3d3',
+                                            backgroundColor: 'hsla(220, 70%, 8%, 1)',
+                                            color: 'white',
                                             padding: '12px',
                                             fontSize: '1.1rem',
-                                            border: '1px solid hsla(220, 30%, 40%, 0.3)',
+                                            border: '1px solid hsla(220, 70%, 20%, 1)',
                                             borderRadius: '20px',
                                             cursor: 'pointer',
-                                            textDecoration: 'none',
-                                            fontWeight: 'bold'
+                                            marginTop: '20px'
                                         }}
                                         disabled={isLoading}
                                         onMouseOver={(e) => {
@@ -599,7 +598,7 @@ const ProfilePage = () => {
                                             e.currentTarget.style.textDecoration = 'none';
                                         }}
                                     >
-                                        Cancel
+                                        Vissza
                                     </button>
                                     <button
                                         type="submit"
@@ -623,7 +622,7 @@ const ProfilePage = () => {
                                                 <span className="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>
                                                 Saving...
                                             </>
-                                        ) : 'Save Changes'}
+                                        ) : 'Mentés'}
                                     </button>
                                 </div>
                             </form>
@@ -631,27 +630,27 @@ const ProfilePage = () => {
                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '5%', marginBottom:'5%' }}>
                                 <div style={{ flex: '1 1 45%' }}>
                                     <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Email</p>
-                                    <p style={{ color: 'white', fontWeight: 'normal' }}>{currentUser?.email || 'Not available'}</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.email || 'Not available'}</p>
                                 </div>
 
                                 <div style={{ flex: '1 1 45%' }}>
-                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Phone Number</p>
-                                    <p style={{ color: 'white', fontWeight: 'normal' }}>{currentUser?.phoneNumber || 'Not provided'}</p>
+                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Telefonszám</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.phoneNumber || 'Not provided'}</p>
                                 </div>
 
                                 <div style={{ flex: '1 1 45%' }}>
-                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>First Name</p>
-                                    <p style={{ color: 'white', fontWeight: 'normal' }}>{currentUser?.firstName || 'Not provided'}</p>
+                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Kereszt név</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.firstName || 'Not provided'}</p>
                                 </div>
 
                                 <div style={{ flex: '1 1 45%' }}>
-                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Last Name</p>
-                                    <p style={{ color: 'white', fontWeight: 'normal' }}>{currentUser?.lastName || 'Not provided'}</p>
+                                    <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Vezeték név</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.lastName || 'Not provided'}</p>
                                 </div>
 
                                 <div style={{ flex: '1 1 45%' }}>
                                     <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Role</p>
-                                    <p style={{ color: 'white', fontWeight: 'normal' }}>{currentUser?.role?.toLowerCase() || 'Not provided'}</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.role?.toLowerCase() || 'Not provided'}</p>
                                 </div>
                             </div>
                         )}
@@ -679,7 +678,7 @@ const ProfilePage = () => {
                                     onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
                                     onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
                                 >
-                                    Edit Profile
+                                    Profil adatok szerkesztése
                                 </button>
                                 <button
                                     onClick={() => setIsAdminView(true)}
@@ -697,7 +696,7 @@ const ProfilePage = () => {
                                     onMouseOver={(e) => e.currentTarget.style.boxShadow = '0 0 15px rgba(255, 255, 255, 0.8)'}
                                     onMouseOut={(e) => e.currentTarget.style.boxShadow = 'none'}
                                 >
-                                    View All Users
+                                    Felhasználók megtekintése
                                 </button>
                             </div>
                         )}

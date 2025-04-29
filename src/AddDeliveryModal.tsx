@@ -75,7 +75,7 @@ const AddDeliveryModal = () => {
           setSelectedAddressId(addressesRes.data[0].id);
         }
       } catch (err) {
-        setError('Failed to load initial data');
+        setError('Nem sikerült betölteni az adatokat.');
       } finally {
         setIsLoading(false);
       }
@@ -94,7 +94,7 @@ const AddDeliveryModal = () => {
         const response = await api.get(`/warehouses/${selectedWarehouseId}/inventories`);
         setInventories(response.data);
       } catch (err) {
-        setError('Failed to load inventories');
+        setError('Nem sikerült betölteni a leltárt.');
       } finally {
         setIsLoading(false);
       }
@@ -112,12 +112,12 @@ const AddDeliveryModal = () => {
 
   const addProductToDelivery = (inventory: Inventory) => {
     if (selectedProducts.some(p => p.inventoryId === inventory.id)) {
-      setError('This product is already in the delivery');
+      setError('Ez a termék már benne van a rendelésben.');
       return;
     }
 
     if (inventory.quantity <= 0) {
-      setError('No available stock for this product');
+      setError('Ez a termék jelenleg nincs készleten.');
       return;
     }
 
@@ -148,12 +148,12 @@ const AddDeliveryModal = () => {
     e.preventDefault();
 
     if (selectedProducts.length === 0) {
-      setError('Please add at least one product to the delivery');
+      setError('Adjon hozzá legalább egy terméket a rendeléshez.');
       return;
     }
 
     if (!selectedAddressId) {
-      setError('Please select a delivery address');
+      setError('Válasszon egy szállítási címet.');
       return;
     }
 
@@ -161,7 +161,7 @@ const AddDeliveryModal = () => {
     for (const item of selectedProducts) {
       const inventory = inventories.find(inv => inv.id === item.inventoryId);
       if (!inventory || item.quantity > inventory.quantity) {
-        setError(`Not enough stock for ${item.productName}`);
+        setError(`Nincs elegendő ${item.productName} raktáron.`);
         return;
       }
     }
@@ -173,7 +173,7 @@ const AddDeliveryModal = () => {
       // Find the selected address
       const selectedAddress = addresses.find(a => a.id === selectedAddressId);
       if (!selectedAddress) {
-        throw new Error('Selected address not found');
+        throw new Error('A kiválasztott cím nem található.');
       }
 
       const res = await api.post('/deliveries', {
@@ -193,10 +193,10 @@ const AddDeliveryModal = () => {
         });
       });
 
-      setSuccess('Outgoing delivery created successfully!');
+      setSuccess('A kimenő rendelés sikeresen létrejött!');
       resetForm();
     } catch (error) {
-      setError(`Failed to create delivery: ${error instanceof Error ? error.message : String(error)}`);
+      setError(`A rendelés létrehozása sikertelen volt: ${error instanceof Error ? error.message : String(error)}`);
     } finally {
       setIsLoading(false);
     }
@@ -226,11 +226,11 @@ const AddDeliveryModal = () => {
         fontSize: '1.75rem',
         fontWeight: 'bold',
         marginBottom: '1.5rem',
-        color: 'hsla(220, 70%, 60%, 1)',
+        color: 'white',
         borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)',
         paddingBottom: '0.75rem'
       }}>
-        Outgoing Delivery Creation
+        Kimenő rendelés létrehozása
       </h2>
 
       {error && (
@@ -270,9 +270,9 @@ const AddDeliveryModal = () => {
             <label style={{
               display: 'block',
               marginBottom: '0.5rem',
-              color: 'hsla(220, 30%, 70%, 1)'
+              color: 'white'
             }}>
-              Delivery Date
+              Rendelés dátuma
             </label>
             <input
               type="date"
@@ -293,9 +293,9 @@ const AddDeliveryModal = () => {
             <label style={{
               display: 'block',
               marginBottom: '0.5rem',
-              color: 'hsla(220, 30%, 70%, 1)'
+              color: 'white'
             }}>
-              Delivery Address
+              Szállítási Cím
             </label>
             <select
               value={selectedAddressId ?? ''}
@@ -321,9 +321,9 @@ const AddDeliveryModal = () => {
             <label style={{
               display: 'block',
               marginBottom: '0.5rem',
-              color: 'hsla(220, 30%, 70%, 1)'
+              color: 'white'
             }}>
-              Warehouse
+              Raktár
             </label>
             <select
               value={selectedWarehouseId ?? ''}
@@ -351,13 +351,13 @@ const AddDeliveryModal = () => {
           <label style={{
             display: 'block',
             marginBottom: '0.5rem',
-            color: 'hsla(220, 30%, 70%, 1)'
+            color: 'white'
           }}>
-            Search Products
+            Termék keresése
           </label>
           <input
             type="text"
-            placeholder="Search by name or barcode"
+            placeholder="Keresés név vagy vonalkód alapján."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             disabled={isLoading}
@@ -389,9 +389,9 @@ const AddDeliveryModal = () => {
             <h5 style={{
               fontSize: '1.1rem',
               marginBottom: '1rem',
-              color: 'hsla(220, 70%, 60%, 1)'
+              color: 'white'
             }}>
-              Available Products ({filteredInventories.length})
+              Elerhető termékek ({filteredInventories.length})
             </h5>
             <div style={{
               display: 'grid',
@@ -410,9 +410,9 @@ const AddDeliveryModal = () => {
                 }}>
                   <div style={{ marginBottom: '0.5rem' }}>
                     <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>{inv.product.name}</h4>
-                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Barcode: {inv.product.barcode}</p>
-                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Stock: {inv.quantity}</p>
-                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Price: {inv.product.unitPrice} Ft</p>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Vonalkód: {inv.product.barcode}</p>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Készleten: {inv.quantity} db</p>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Ár: {inv.product.unitPrice} Ft</p>
                   </div>
                   <button
                     type="button"
@@ -430,7 +430,7 @@ const AddDeliveryModal = () => {
                       cursor: selectedProducts.some(p => p.inventoryId === inv.id) ? 'not-allowed' : 'pointer'
                     }}
                   >
-                    Add to Delivery
+                    Hozzáadás a rendeléshez
                   </button>
                 </div>
               ))}
@@ -448,9 +448,9 @@ const AddDeliveryModal = () => {
             <h5 style={{
               fontSize: '1.1rem',
               marginBottom: '1rem',
-              color: 'hsla(220, 70%, 60%, 1)'
+              color: 'white'
             }}>
-              Delivery Items ({selectedProducts.length})
+              Rendelt termékek: ({selectedProducts.length})
             </h5>
             {selectedProducts.length > 0 ? (
               <div style={{ overflowX: 'auto' }}>
@@ -464,10 +464,10 @@ const AddDeliveryModal = () => {
                       backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
                       borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
                     }}>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Product</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Quantity</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Price (Ft)</th>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Action</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Termék neve</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Mennyiség</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Ár (Ft)</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -529,7 +529,7 @@ const AddDeliveryModal = () => {
                                 cursor: 'pointer'
                               }}
                             >
-                              Remove
+                              Eltávolítás
                             </button>
                           </td>
                         </tr>
@@ -544,7 +544,7 @@ const AddDeliveryModal = () => {
                 color: 'hsla(220, 30%, 70%, 1)',
                 padding: '1.5rem 0'
               }}>
-                No products added to delivery yet
+                Még nincs termék hozzáadva a rendeléshez.
               </p>
             )}
           </div>
@@ -566,12 +566,12 @@ const AddDeliveryModal = () => {
               padding: '0.75rem 1.5rem',
               backgroundColor: 'transparent',
               color: 'white',
-              border: '1px solid hsla(220, 30%, 40%, 1)',
+              border: '1px solid hsla(220, 70%, 20%, 1)',
               borderRadius: '20px',
               cursor: 'pointer'
             }}
           >
-            Clear All
+            Összes törlése
           </button>
           <button
             type="submit"
@@ -579,7 +579,7 @@ const AddDeliveryModal = () => {
             style={{
               padding: '0.75rem 1.5rem',
               backgroundColor: selectedProducts.length === 0 
-                ? 'hsla(220, 30%, 30%, 1)' 
+                ?  'transparent'
                 : 'hsla(220, 70%, 8%, 1)',
               color: 'white',
               border: '1px solid hsla(220, 70%, 20%, 1)',
