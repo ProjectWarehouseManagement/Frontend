@@ -23,7 +23,7 @@ const LoginForm: React.FC = () => {
       setIsLoggedIn(true);
       setSuccess("Sikeres bejelentkezés!");
     } catch (err) {
-      setError((err as Error).message);
+      setError("Hibas email vagy jelszo");
     }
   };
 

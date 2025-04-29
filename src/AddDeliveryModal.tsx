@@ -13,6 +13,7 @@ interface Inventory {
   id: number;
   quantity: number;
   product: Product;
+  warehouseId: number; // Added warehouseId to Inventory
 }
 
 interface Warehouse {
@@ -48,7 +49,6 @@ const AddDeliveryModal = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
-  const [selectedWarehouseId, setSelectedWarehouseId] = useState<number | null>(null);
   const [inventories, setInventories] = useState<Inventory[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProducts, setSelectedProducts] = useState<DeliveryItem[]>([]);
@@ -68,9 +68,6 @@ const AddDeliveryModal = () => {
         setWarehouses(warehousesRes.data);
         setAddresses(addressesRes.data);
         
-        if (warehousesRes.data.length > 0) {
-          setSelectedWarehouseId(warehousesRes.data[0].id);
-        }
         if (addressesRes.data.length > 0) {
           setSelectedAddressId(addressesRes.data[0].id);
         }
@@ -84,15 +81,25 @@ const AddDeliveryModal = () => {
     fetchInitialData();
   }, [isLoggedIn]);
 
-  // Fetch inventories when warehouse changes
+  // Fetch all inventories on load
   useEffect(() => {
-    if (!selectedWarehouseId) return;
+    if (!isLoggedIn) return;
 
     const fetchInventories = async () => {
       try {
         setIsLoading(true);
-        const response = await api.get(`/warehouses/${selectedWarehouseId}/inventories`);
-        setInventories(response.data);
+        // Get inventories from all warehouses
+        const inventoriesPromises = warehouses.map(warehouse => 
+          api.get(`/warehouses/${warehouse.id}/inventories`)
+        );
+        const inventoriesResults = await Promise.all(inventoriesPromises);
+        const allInventories = inventoriesResults.flatMap((res, index) => 
+          res.data.map((inv: any) => ({
+            ...inv,
+            warehouseId: warehouses[index].id // Add warehouseId to each inventory
+          }))
+        );
+        setInventories(allInventories);
       } catch (err) {
         setError('Nem sikerült betölteni a leltárt.');
       } finally {
@@ -100,14 +107,16 @@ const AddDeliveryModal = () => {
       }
     };
 
-    fetchInventories();
-  }, [selectedWarehouseId]);
+    if (warehouses.length > 0) {
+      fetchInventories();
+    }
+  }, [isLoggedIn, warehouses]);
 
   // Filtered inventories based on search and available stock
   const filteredInventories = inventories.filter(inv =>
     (inv.product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     inv.product.barcode.toLowerCase().includes(searchTerm.toLowerCase())) &&
-    inv.quantity > 0  // Only include products with available stock
+    inv.quantity > 0
   );
 
   const addProductToDelivery = (inventory: Inventory) => {
@@ -128,7 +137,7 @@ const AddDeliveryModal = () => {
         productId: inventory.product.id,
         productName: inventory.product.name,
         quantity: 1,
-        warehouseId: selectedWarehouseId!,
+        warehouseId: inventory.warehouseId, // Use the inventory's warehouseId
         sellingPrice: inventory.product.unitPrice
       }
     ]);
@@ -157,11 +166,19 @@ const AddDeliveryModal = () => {
       return;
     }
 
-    // Check inventory quantities
+    // Check inventory quantities for each product in their respective warehouses
     for (const item of selectedProducts) {
-      const inventory = inventories.find(inv => inv.id === item.inventoryId);
-      if (!inventory || item.quantity > inventory.quantity) {
-        setError(`Nincs elegendő ${item.productName} raktáron.`);
+      try {
+        const inventoryRes = await api.get(`/warehouses/${item.warehouseId}/inventories`);
+        const inventory = inventoryRes.data.find((inv: any) => inv.id === item.inventoryId);
+        
+        if (!inventory || item.quantity > inventory.quantity) {
+          const warehouseName = warehouses.find(w => w.id === item.warehouseId)?.name || 'ismeretlen';
+          setError(`Nincs elegendő ${item.productName} raktáron a(z) ${warehouseName} raktárban.`);
+          return;
+        }
+      } catch (err) {
+        setError(`Nem sikerült ellenőrizni a készletet a ${item.productName} termékhez.`);
         return;
       }
     }
@@ -170,18 +187,15 @@ const AddDeliveryModal = () => {
       setIsLoading(true);
       setError(null);
 
-      // Find the selected address
-      const selectedAddress = addresses.find(a => a.id === selectedAddressId);
-      if (!selectedAddress) {
-        throw new Error('A kiválasztott cím nem található.');
-      }
-
+      // Create delivery
       const res = await api.post('/deliveries', {
         deliveryDate: new Date(deliveryDate).toISOString(),
+        addressId: selectedAddressId
       });
 
-      selectedProducts.forEach(async (item) => {
-        await api.post('/deliveries/details', {
+      // Add all delivery items in parallel
+      await Promise.all(selectedProducts.map(item => 
+        api.post('/deliveries/details', {
           price: item.sellingPrice,
           shippingCost: 1,
           OrderQuantity: item.quantity,
@@ -190,8 +204,8 @@ const AddDeliveryModal = () => {
           warehouseId: item.warehouseId,
           addressId: selectedAddressId,
           deliveryId: res.data.id
-        });
-      });
+        })
+      ));
 
       setSuccess('A kimenő rendelés sikeresen létrejött!');
       resetForm();
@@ -210,6 +224,10 @@ const AddDeliveryModal = () => {
 
   const formatAddress = (address: Address) => {
     return `${address.street}, ${address.city}, ${address.postalCode}`;
+  };
+
+  const getWarehouseName = (warehouseId: number) => {
+    return warehouses.find(w => w.id === warehouseId)?.name || 'Ismeretlen raktár';
   };
 
   return (
@@ -317,34 +335,6 @@ const AddDeliveryModal = () => {
               ))}
             </select>
           </div>
-          <div style={{ flex: 1, minWidth: '200px' }}>
-            <label style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              color: 'white'
-            }}>
-              Raktár
-            </label>
-            <select
-              value={selectedWarehouseId ?? ''}
-              onChange={(e) => setSelectedWarehouseId(Number(e.target.value))}
-              required
-              style={{
-                width: '100%',
-                padding: '0.75rem',
-                border: '1px solid #555',
-                borderRadius: '5px',
-                backgroundColor: 'black',
-                color: 'white'
-              }}
-            >
-              {warehouses.map(warehouse => (
-                <option key={warehouse.id} value={warehouse.id}>
-                  {warehouse.name}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
 
         <div style={{ marginBottom: '1.5rem' }}>
@@ -391,7 +381,7 @@ const AddDeliveryModal = () => {
               marginBottom: '1rem',
               color: 'white'
             }}>
-              Elerhető termékek ({filteredInventories.length})
+              Elérhető termékek ({filteredInventories.length})
             </h5>
             <div style={{
               display: 'grid',
@@ -410,6 +400,9 @@ const AddDeliveryModal = () => {
                 }}>
                   <div style={{ marginBottom: '0.5rem' }}>
                     <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1rem' }}>{inv.product.name}</h4>
+                    <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>
+                      Raktár: {getWarehouseName(inv.warehouseId)}
+                    </p>
                     <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Vonalkód: {inv.product.barcode}</p>
                     <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Készleten: {inv.quantity} db</p>
                     <p style={{ margin: '0.25rem 0', fontSize: '0.85rem', color: 'hsla(220, 30%, 70%, 1)' }}>Ár: {inv.product.unitPrice} Ft</p>
@@ -464,7 +457,8 @@ const AddDeliveryModal = () => {
                       backgroundColor: 'hsla(220, 30%, 20%, 0.5)',
                       borderBottom: '1px solid hsla(220, 30%, 40%, 0.3)'
                     }}>
-                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Termék neve</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Termék</th>
+                      <th style={{ padding: '0.75rem', textAlign: 'left' }}>Raktár</th>
                       <th style={{ padding: '0.75rem', textAlign: 'left' }}>Mennyiség</th>
                       <th style={{ padding: '0.75rem', textAlign: 'left' }}>Ár (Ft)</th>
                       <th style={{ padding: '0.75rem', textAlign: 'left' }}></th>
@@ -480,6 +474,7 @@ const AddDeliveryModal = () => {
                           borderBottom: '1px solid hsla(220, 30%, 40%, 0.1)'
                         }}>
                           <td style={{ padding: '0.75rem' }}>{item.productName}</td>
+                          <td style={{ padding: '0.75rem' }}>{getWarehouseName(item.warehouseId)}</td>
                           <td style={{ padding: '0.75rem' }}>
                             <input
                               type="number"
@@ -579,7 +574,7 @@ const AddDeliveryModal = () => {
             style={{
               padding: '0.75rem 1.5rem',
               backgroundColor: selectedProducts.length === 0 
-                ?  'transparent'
+                ? 'transparent'
                 : 'hsla(220, 70%, 8%, 1)',
               color: 'white',
               border: '1px solid hsla(220, 70%, 20%, 1)',
@@ -587,7 +582,7 @@ const AddDeliveryModal = () => {
               cursor: selectedProducts.length === 0 ? 'not-allowed' : 'pointer'
             }}
           >
-            {isLoading ? 'Creating Delivery...' : 'Create Delivery'}
+            {isLoading ? 'Rendelés létrehozása...' : 'Rendelés létrehozása'}
           </button>
         </div>
       </form>
