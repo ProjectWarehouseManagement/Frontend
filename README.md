@@ -48,3 +48,7 @@ export default tseslint.config({
   },
 })
 ```
+
+Admin:
+Email: admin@admin.com
+Password: admin
