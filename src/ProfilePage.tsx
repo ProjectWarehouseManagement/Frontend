@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from './AuthContext';
 import { api } from './environments/api';
@@ -119,11 +119,11 @@ const ProfilePage = () => {
             setIsLoading(true);
             await api.patch(`/users/${userId}`, { role: newRole });
 
-            setMessage({ text: 'User role updated successfully', type: 'success' });
+            setMessage({ text: 'Felhasználó sikeresen frissitve lett.', type: 'success' });
             await fetchUsers();
         } catch (error) {
-            console.error('Error updating user role:', error);
-            setMessage({ text: error instanceof AxiosError ? error.response?.data.message : 'An unknown error occurred', type: 'danger' });
+            console.error('Hiba felhasználó frissitése közben:', error);
+            setMessage({ text: error instanceof AxiosError ? error.response?.data.message : 'Ismeretlen hiba történt.', type: 'danger' });
         } finally {
             setIsLoading(false);
         }
@@ -494,11 +494,11 @@ const ProfilePage = () => {
                                                 {...register('newPassword', {
                                                     minLength: {
                                                         value: 8,
-                                                        message: 'Password must be at least 8 characters',
+                                                        message: 'Jelszó legalább 8 karakter hosszú kell legyen',
                                                     },
                                                     validate: (val) => {
                                                         if (watch('currentPassword') && !val) {
-                                                            return 'New password is required when changing password';
+                                                            return 'Új jelszó megadása kötelező, ha a jelenlegi jelszót megadtad';
                                                         }
                                                         return true;
                                                     },
@@ -538,7 +538,7 @@ const ProfilePage = () => {
                                                 {...register('confirmPassword', {
                                                     validate: (val) => {
                                                         if (watch('newPassword') !== val) {
-                                                            return 'Passwords do not match';
+                                                            return 'A jelszavak nem egyeznek meg';
                                                         }
                                                         return true;
                                                     },
@@ -635,22 +635,22 @@ const ProfilePage = () => {
 
                                 <div style={{ flex: '1 1 45%' }}>
                                     <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Telefonszám</p>
-                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.phoneNumber || 'Not provided'}</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.phoneNumber || 'Nincs megadva'}</p>
                                 </div>
 
                                 <div style={{ flex: '1 1 45%' }}>
                                     <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Kereszt név</p>
-                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.firstName || 'Not provided'}</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.firstName || 'Nincs megadva'}</p>
                                 </div>
 
                                 <div style={{ flex: '1 1 45%' }}>
                                     <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Vezeték név</p>
-                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.lastName || 'Not provided'}</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.lastName || 'Nincs megadva'}</p>
                                 </div>
 
                                 <div style={{ flex: '1 1 45%' }}>
                                     <p style={{ color: '#d3d3d3', marginBottom: '0.5rem', fontSize: '20px' }}>Role</p>
-                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.role?.toLowerCase() || 'Not provided'}</p>
+                                    <p style={{ color: 'white', fontWeight: 'normal', fontSize: '15px' }}>{currentUser?.role?.toLowerCase() || 'Nincs megadva'}</p>
                                 </div>
                             </div>
                         )}

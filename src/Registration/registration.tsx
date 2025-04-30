@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import classes from "./registrationForm.module.css";
 import { NavLink } from "react-router-dom";
 

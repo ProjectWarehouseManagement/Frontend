@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Row, Col, Spinner, Alert, Table } from 'react-bootstrap';
 import * as XLSX from 'xlsx';
 import { useAuth } from './AuthContext';
 import { api } from './environments/api';
-import { all } from 'axios';
 
 interface BarcodeMapping {
     numericBarcode: string;
@@ -80,7 +78,6 @@ const AddOrderForm: React.FC = () => {
   const [selectedProducts, setSelectedProducts] = useState<OrderItem[]>([]);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
-  const [barcodeMappings, setBarcodeMappings] = useState<BarcodeMapping[]>([]);
 
   // Fetch initial data
   useEffect(() => {
@@ -239,7 +236,6 @@ const AddOrderForm: React.FC = () => {
           const newProducts = uploadResponses.map(response => response.data);
           const allProducts = [...existingProducts, ...newProducts];
   
-          setBarcodeMappings(prev => [...prev, ...newMappings]);
           setProducts(allProducts);
         
         setSuccess(

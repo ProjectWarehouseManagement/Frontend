@@ -10,7 +10,7 @@ import AddDeliveryModal from './AddDeliveryModal';
 import LoginForm from './Login/login';
 
 const App = () => {
-  const { isLoggedIn, user } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   return (
     <Routes>

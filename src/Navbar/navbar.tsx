@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import "./navbar.css";
@@ -7,7 +7,6 @@ import { useAuth } from "../AuthContext";
 import { ProviderModal } from "../ProviderModal";
 
 const NavigationBar = () => {
-  const location = useLocation();
   const { isLoggedIn, logout } = useAuth();
   const [isProviderModalOpen, setIsProviderModalOpen] = useState(false);
 

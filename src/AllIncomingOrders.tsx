@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { api } from './environments/api';
 import { useAuth } from './AuthContext';
 import { AxiosError } from 'axios';
-import * as XLSX from 'xlsx';
-
 // Type definitions
 type Order = {
   id: number;
@@ -67,12 +65,6 @@ type Address = {
 type Warehouse = {
   id: number;
   name: string;
-};
-
-type ExcelProductRow = {
-  'Megnevezés'?: string;
-  'Vonalkód'?: string;
-  'Nettó ár (Ft)'?: number;
 };
 
 const OrdersComponent = () => {
